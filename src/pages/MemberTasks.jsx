@@ -2,7 +2,7 @@ import React from 'react';
 
 function MembersTasks() {
   return (
-  <div>Members Grid</div>
+  <div>Members Tasks</div>
   )
 }
 export default MembersTasks;
