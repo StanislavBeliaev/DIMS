@@ -1,8 +1,6 @@
 import React from 'react';
 
 function MembersTasks() {
-  return (
-  <div>Members Tasks</div>
-  )
+    return <div>Membeers Tasks</div>;
 }
 export default MembersTasks;

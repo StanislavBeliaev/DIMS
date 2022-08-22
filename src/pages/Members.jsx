@@ -1,9 +1,8 @@
 import React from 'react';
+import classes from './pages.module.css';
 
 function Members() {
-  return (
-  <div>Members</div>
-  )
+    return <div className={classes.MainMembers}>Membeeers</div>;
 }
 
 Members.propTypes = {};

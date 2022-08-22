@@ -1,3 +1,5 @@
+/*eslint no-unused-vars: 1*/
+import React from 'react';
 import './index.css';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,21 +18,21 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyB-e867zKVObWp4xno5RIw4TNIk2qgGon4',
+    apiKey: 'AIzaSyB-e867zKVObWp4xno5RIw4TNIk2qgGon4',
 
-  authDomain: 'dims-e0abc.firebaseapp.com',
+    authDomain: 'dims-e0abc.firebaseapp.com',
 
-  databaseURL: 'https://dims-e0abc-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL: 'https://dims-e0abc-default-rtdb.europe-west1.firebasedatabase.app',
 
-  projectId: 'dims-e0abc',
+    projectId: 'dims-e0abc',
 
-  storageBucket: 'dims-e0abc.appspot.com',
+    storageBucket: 'dims-e0abc.appspot.com',
 
-  messagingSenderId: '1052199020912',
+    messagingSenderId: '1052199020912',
 
-  appId: '1:1052199020912:web:73019d06d9e643654a07b5',
+    appId: '1:1052199020912:web:73019d06d9e643654a07b5',
 
-  measurementId: 'G-GXY779PFRW',
+    measurementId: 'G-GXY779PFRW',
 };
 
 // Initialize Firebase
@@ -42,13 +44,12 @@ const auth = getAuth(app);
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
 
-
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>,
 );
 
 // If you want to start measuring performance in your app, pass a function

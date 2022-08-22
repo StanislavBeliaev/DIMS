@@ -1,1 +1,56 @@
+.Main{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    background-color: #f6f7fa;
+}
+.Header{
+    width: 1900px;
+    height: 115px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    background-color: #0e1a35;
+}
+.LogoName{
+    width: 303px;
+    height: 118px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #0e1a35;
+    font-size: 48px;
+}
+.ContentContainer{
+    display: flex;
+}
+.SideBar{
+    width: 303px;
+    height: 1234px;
+    background-color: #0e1a35;
+}
+.ButtonContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 200px;
+    margin-right: 24px;
+}
+.Login:hover{
+    background-color: #5785FD;
+}
+.Login{
+    width: 100px;
+    height: 115px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    
+}
 
+.Register{
+    height: 100%;
+    width: 100px;
+}

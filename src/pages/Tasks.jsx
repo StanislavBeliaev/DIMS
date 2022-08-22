@@ -1,9 +1,7 @@
-import React from "react";
+import React from 'react';
 
-function Tasks(){
-    return (
-        <div>Tasks</div>
-    )
+function Tasks() {
+    return <div>Tassks</div>;
 }
 
 export default Tasks;
