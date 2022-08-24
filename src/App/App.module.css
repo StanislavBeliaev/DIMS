@@ -24,6 +24,7 @@
 }
 .ContentContainer{
     display: flex;
+    
 }
 .SideBar{
     width: 303px;
