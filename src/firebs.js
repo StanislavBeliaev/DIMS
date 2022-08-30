@@ -1,5 +1,3 @@
-import React from 'react';
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getDatabase } from 'firebase/database';
@@ -11,7 +9,7 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: 'AIzaSyB-e867zKVObWp4xno5RIw4TNIk2qgGon4',
 
     authDomain: 'dims-e0abc.firebaseapp.com',
@@ -30,11 +28,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const fire = initializeApp(firebaseConfig);
-const analytics = getAnalytics(fire);
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 // Initialize Firebase Authentication and get a reference to the service
-export const db = getFirestore(fire);
-const auth = getAuth(fire);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 // Initialize Realtime Database and get a reference to the service
-const database = getDatabase(fire);
-export default fire;
+export const database = getDatabase(app);
+export default app;

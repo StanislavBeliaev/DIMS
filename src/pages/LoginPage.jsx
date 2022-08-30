@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import fire from '../fire';
 import classes from './pages.module.css';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import app from '../firebs';
 
 function LoginPage() {
     function handleSubmit(e) {
+        /*eslint no-debugger: 1*/
+        debugger;
         e.preventDefault();
-        console.log('Отправлена форма');
+        const auth = getAuth(app);
+        const target = e.target;
+        const email = target.email.value;
+        const password = target.password.value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in
+                console.log(userCredential);
+                // ...
+            })
+
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
