@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Routes } from 'react-router-dom';
 import Members from '../pages/Members';
 import MembersProgress from '../pages/MemberProgress';
 import MembersTasks from '../pages/MemberTasks';
@@ -20,10 +20,11 @@ function App() {
             </div>
             <div className={classes.ContentContainer}>
                 <div className={classes.SideBar}>SideBar</div>
-                <Route exact path='/Login' component={LoginPage} />
-                <Route exact path='/Members' component={Members} />
-                <Route exact path='/MembersProgress' component={MembersProgress} />
-                <Route exact path='/MembersTasks' component={MembersTasks} />
+                <Routes>
+                    <Route exact path='/Login' element={<LoginPage />}>
+                        <Route exact path='/Login/Members' element={<Members />} />
+                    </Route>
+                </Routes>
             </div>
         </div>
     );
