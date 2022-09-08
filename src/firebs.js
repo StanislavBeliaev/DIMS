@@ -36,4 +36,5 @@ export const auth = getAuth(app);
 setPersistence(auth, browserSessionPersistence);
 // Initialize Realtime Database and get a reference to the service
 export const database = getDatabase(app);
+console.log(database);
 export default app;
