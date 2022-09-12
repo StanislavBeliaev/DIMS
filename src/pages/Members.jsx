@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
+import { ModalCreate } from 'components/Modal/ModalCreate';
+import { Form } from 'components/Form';
 import classes from './pages.module.css';
 import '../firebs';
 
 function Members() {
+    const [showModal, setShowModal] = useState(false);
+    const openModal = () => {
+        setShowModal((prev) => !prev);
+    };
+
     const datatest = [
         { name: 'Lydia', age: 19, educatoin: 'MGAC' },
         { name: 'Artem', age: 19, educatoin: 'MGAC' },
@@ -12,7 +19,24 @@ function Members() {
     return (
         <div className={classes.MembersContainer}>
             <h1 className={classes.MainMembers}>Members</h1>
-            <Button className={classes.ButtonCreate}>Create</Button>
+            <Button className={classes.ButtonCreate} onClick={openModal}>
+                Create
+            </Button>
+            <ModalCreate showModal={showModal} setShowModal={setShowModal}>
+                <div className={classes.ModalCreateContainer}>
+                    <div className={classes.ModalCreateHeader}>
+                        <h2 className={classes.ModalCreateName}>Create member</h2>
+                    </div>
+                    <div className={classes.ModalCreateContent}>
+                        <Form>
+                            <Button className={classes.ButtonCreateMember}>Create</Button>
+                            <Button className={classes.ButtonBack} onClick={() => setShowModal(false)}>
+                                Back To List
+                            </Button>
+                        </Form>
+                    </div>
+                </div>
+            </ModalCreate>
             <div className={classes.TableContainer}>
                 <table className={classes.Table}>
                     <tbody>
