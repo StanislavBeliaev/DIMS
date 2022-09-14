@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'components/Buttons/Button/Button';
 import classes from '../pages/pages.module.css';
-export const Form = ({ children }) => (
-    <form className={classes.Form} action=''>
+export const Form = ({ children, onSubmit }) => (
+    <form className={classes.Form} onSubmit={onSubmit}>
         <div className={classes.FormContent}>
             <div className={classes.ModalCreateLeft}>
                 <label className={classes.FormLeft}>
                     Name
-                    <input className={classes.InputSize} type='text' name='Name' placeholder=' Name' required />
+                    <input className={classes.InputSize} type='text' name='name' placeholder=' Name' required />
                 </label>
                 <label className={classes.FormLeft}>
                     Last Name
@@ -22,11 +22,11 @@ export const Form = ({ children }) => (
                 </label>
                 <label className={classes.FormLeft}>
                     Email
-                    <input className={classes.InputSize} type='email' name='Email' placeholder=' Email' required />
+                    <input className={classes.InputSize} type='email' name='email' placeholder=' Email' required />
                 </label>
                 <label className={classes.FormLeft}>
                     Direction
-                    <select className={classes.InputSize} type='text' name='Direction' placeholder='Ditection'>
+                    <select className={classes.InputSize} type='text' name='direction' placeholder='Ditection'>
                         <option>.Net</option>
                         <option>Java</option>
                         <option>Frontend</option>
@@ -34,14 +34,14 @@ export const Form = ({ children }) => (
                 </label>
                 <label className={classes.FormLeft}>
                     Sex
-                    <select className={classes.InputSize} type='text' name='Sex' placeholder='Sex'>
+                    <select className={classes.InputSize} type='text' name='sex' placeholder='Sex'>
                         <option>Male</option>
                         <option>Female</option>
                     </select>
                 </label>
                 <label className={classes.FormLeft}>
                     Role
-                    <input className={classes.InputSize} type='text' name='Role' required />
+                    <input className={classes.InputSize} type='text' name='role' required />
                 </label>
                 <label className={classes.FormLeft}>
                     Password
@@ -57,7 +57,7 @@ export const Form = ({ children }) => (
                     Confirm password
                     <input
                         className={classes.InputSize}
-                        type='email'
+                        type='password'
                         name='confirm password'
                         placeholder='Password'
                         required
@@ -67,11 +67,11 @@ export const Form = ({ children }) => (
             <div className={classes.ModalCrateRight}>
                 <label className={classes.FormRight}>
                     Date of Birth
-                    <input className={classes.InputSize} type='date' name='date' required />
+                    <input className={classes.InputSize} type='date' name='dateofbirth' required />
                 </label>
                 <label className={classes.FormRight}>
                     Address
-                    <input className={classes.InputSize} type='text' name='Address' required />
+                    <input className={classes.InputSize} type='text' name='address' required />
                 </label>
                 <label className={classes.FormRight}>
                     Mobile phone
@@ -79,23 +79,23 @@ export const Form = ({ children }) => (
                 </label>
                 <label className={classes.FormRight}>
                     Skype
-                    <input className={classes.InputSize} type='text' name='Direction' required />
+                    <input className={classes.InputSize} type='text' name='skype' required />
                 </label>
                 <label className={classes.FormRight}>
                     Start date
-                    <input className={classes.InputSize} type='text' name='Sex' required />
+                    <input className={classes.InputSize} type='date' name='startdate' required />
                 </label>
                 <label className={classes.FormRight}>
                     Education
-                    <input className={classes.InputSize} type='text' name='Role' required />
+                    <input className={classes.InputSize} type='text' name='education' required />
                 </label>
                 <label className={classes.FormRight}>
                     University average score
-                    <input className={classes.InputSize} type='password' name='password' required />
+                    <input className={classes.InputSize} type='text' name='score' required />
                 </label>
                 <label className={classes.FormRight}>
                     Math score
-                    <input className={classes.InputSize} type='email' name='confirm password' required />
+                    <input className={classes.InputSize} type='text' name='math' required />
                 </label>
             </div>
         </div>
@@ -104,4 +104,5 @@ export const Form = ({ children }) => (
 );
 Form.propTypes = {
     children: PropTypes.node,
+    onSubmit: PropTypes.func,
 };
