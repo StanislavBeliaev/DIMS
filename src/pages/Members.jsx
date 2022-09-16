@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
 import { ModalCreate } from 'components/Modal/ModalCreate';
 import { Form } from 'components/Form';
@@ -16,10 +16,12 @@ function Members() {
     };
     const database = getDatabase(app);
     const users = ref(database, 'users/');
-    //  onValue(users, (snapshot) => {
-    //      const data = snapshot.val();
-    //      setData(Object.entries(data))
-    //  });
+    useEffect(() =>
+        onValue(users, (snapshot) => {
+            const data = snapshot.val();
+            setData(Object.entries(data));
+        }),
+    );
     function writeUserData(e) {
         /*eslint no-debugger: 1*/
 
@@ -87,8 +89,8 @@ function Members() {
                                 <tr key={id} className={classes.TrData}>
                                     <td className={classes.Td}>{idx + 1}</td>
                                     <td className={classes.Td}>{val.name}</td>
-                                    <td className={classes.Td}>{}</td>
-                                    <td className={classes.Td}>{val.educatoin}</td>
+                                    <td className={classes.Td}>{val.direction}</td>
+                                    <td className={classes.Td}>{val.education}</td>
                                     <td className={classes.Td}>{}</td>
                                     <td className={classes.Td}>{val.age}</td>
                                     <td className={classes.TdButtons}>
