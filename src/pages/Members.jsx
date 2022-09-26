@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
 import { ModalCreate } from 'components/Modal/ModalCreate';
 import { ModalEdit } from 'components/Modal/ModalEdit';
+import { ModalDelete } from 'components/Modal/ModalDelete';
 import { Form } from 'components/Form';
-import { getDatabase, ref, set, push, child, onValue, update } from 'firebase/database';
+import { getDatabase, ref, set, push, child, onValue, update, remove } from 'firebase/database';
 import checkPassword from 'components/checkPassword';
 import classes from './pages.module.css';
 import '../firebs';
@@ -13,6 +14,7 @@ import { SaveButton } from 'components/Buttons/SaveButton/SaveButton';
 function Members() {
     const [showModal, setShowModal] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
     const [currentUser, setCurrentUser] = useState({
         name: '',
         lastname: '',
@@ -38,6 +40,12 @@ function Members() {
         setCurrentUser(user);
         setCurrentId(id);
     };
+    const openDelete = (user, id) => {
+        setShowDelete((prev) => !prev);
+        setCurrentUser(user);
+        setCurrentId(id);
+    };
+
     const openModal = () => {
         setShowModal((prev) => !prev);
     };
@@ -52,7 +60,6 @@ function Members() {
         [],
     );
 
-    console.log(database);
     function writeUserData(e) {
         /*eslint no-debugger: 1*/
         e.preventDefault();
@@ -96,11 +103,6 @@ function Members() {
             });
         }
     }
-    // const datatest = [
-    //     { name: 'Lydia', age: 19, educatoin: 'MGAC' },
-    //     { name: 'Artem', age: 19, educatoin: 'MGAC' },
-    //     { name: 'Sasha', age: 25, educatoin: 'MGAC' },
-    // ];
 
     function writeNewUserData(e) {
         e.preventDefault();
@@ -142,6 +144,12 @@ function Members() {
         });
     }
 
+    function deleteUser(e) {
+        e.preventDefault();
+        remove(ref(database, 'users/' + currentId));
+        setShowDelete(false);
+    }
+
     return (
         <div className={classes.MembersContainer}>
             <h1 className={classes.MainMembers}>Members</h1>
@@ -167,6 +175,7 @@ function Members() {
                 </div>
             </ModalCreate>
             {/* Modal Window for create member */}
+            {/* Modal Window for create Editmember */}
             <ModalEdit showEdit={showEdit} setShowEdit={setShowEdit}>
                 <div className={classes.ModalCreateContainer}>
                     <div className={classes.ModalCreateHeader}>
@@ -182,6 +191,27 @@ function Members() {
                     </Form>
                 </div>
             </ModalEdit>
+            {/* Modal Window for create Editmember */}
+            <ModalDelete showDelete={showDelete} setShowDelete={setShowDelete}>
+                <div className={classes.ModalDeleteContainer}>
+                    <div className={classes.ModalDeleteHeader}>
+                        <p className={classes.ModalDeleteName}> Delete member </p>
+                    </div>
+                    <div className={classes.ModalDeleteTextContainer}>
+                        <p className={classes.ModalDeleteText}>Are you sure you want to delete the current member ?</p>
+                    </div>
+                    <div className={classes.ModalDeleteFooter}>
+                        <div className={classes.DeleteButtons}>
+                            <Button className={classes.ActionButtonDelete} onClick={deleteUser}>
+                                Delete
+                            </Button>
+                            <Button className={classes.ButtonBack} onClick={() => setShowDelete(false)}>
+                                Back To List
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </ModalDelete>
             <div className={classes.TableContainer}>
                 <table className={classes.Table}>
                     <tbody>
@@ -209,7 +239,12 @@ function Members() {
                                         <Button className={classes.ActionButtonEdit} onClick={() => opedEdit(val, id)}>
                                             Edit
                                         </Button>
-                                        <Button className={classes.ActionButtonDelete}>Delete</Button>
+                                        <Button
+                                            className={classes.ActionButtonDelete}
+                                            onClick={() => openDelete(val, id)}
+                                        >
+                                            Delete
+                                        </Button>
                                     </td>
                                 </tr>
                             );
