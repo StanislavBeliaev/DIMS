@@ -5,6 +5,7 @@ import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
 import { Form } from 'components/Form';
 import { getDatabase, ref, set, push, child, onValue, update, remove } from 'firebase/database';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, deleteUser } from 'firebase/auth';
 import checkPassword from 'components/checkPassword';
 import classes from './pages.module.css';
 import '../firebs';
@@ -40,6 +41,7 @@ function Members() {
         setCurrentUser(user);
         setCurrentId(id);
     };
+
     const openDelete = (user, id) => {
         setShowDelete((prev) => !prev);
         setCurrentUser(user);
@@ -50,6 +52,7 @@ function Members() {
         setShowModal((prev) => !prev);
     };
     const database = getDatabase(app);
+    const auth = getAuth();
     const users = ref(database, 'users/');
     useEffect(
         () =>
@@ -102,6 +105,10 @@ function Members() {
                 math_score: math_score,
             });
         }
+        createUserWithEmailAndPassword(auth, email, password);
+
+        sendEmailVerification(auth.currentUser);
+        console.log(sendEmailVerification);
     }
 
     function writeNewUserData(e) {
@@ -144,9 +151,9 @@ function Members() {
         });
     }
 
-    function deleteUser(e) {
-        e.preventDefault();
+    function deleteUser() {
         remove(ref(database, 'users/' + currentId));
+
         setShowDelete(false);
     }
 
@@ -212,6 +219,7 @@ function Members() {
                     </div>
                 </div>
             </ModalDelete>
+
             <div className={classes.TableContainer}>
                 <table className={classes.Table}>
                     <tbody>
