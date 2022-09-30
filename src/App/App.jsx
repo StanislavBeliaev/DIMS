@@ -5,6 +5,7 @@ import MembersProgress from '../pages/MemberProgress';
 import MembersTasks from '../pages/MemberTasks';
 import LoginPage from '../pages/LoginPage';
 import classes from './App.module.css';
+import Tasks from 'pages/Tasks';
 
 function App() {
     return (
@@ -19,10 +20,15 @@ function App() {
                 </div>
             </div>
             <div className={classes.ContentContainer}>
-                <div className={classes.SideBar}>SideBar</div>
+                <div className={classes.SideBar}>
+                    <Link to={'/Login/Members/Tasks'}>
+                        <button>Tasks</button>
+                    </Link>
+                </div>
                 <Routes>
                     <Route exact path='/Login' element={<LoginPage />}>
-                        <Route exact path='/Login/Members' element={<Members />} />
+                        <Route path='/Login/Members/' element={<Members />} />
+                        <Route exact path='/Login/Members/Tasks' element={<Tasks />} />
                     </Route>
                 </Routes>
             </div>

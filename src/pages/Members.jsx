@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
+import Tasks from './Tasks';
+import { Route, Link, Routes } from 'react-router-dom';
 import { ModalCreate } from 'components/Modal/ModalCreate';
 import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
@@ -189,7 +191,7 @@ function Members() {
                         <h2 className={classes.ModalCreateName}>Edit member</h2>
                     </div>
                     <Form user={currentUser} setUser={setCurrentUser} onSubmit={writeNewUserData}>
-                        <Button className={classes.ButtonCreateMember} type='submit'>
+                        <Button className={classes.ButtonSave} type='submit'>
                             Save
                         </Button>
                         <Button className={classes.ButtonBack} onClick={() => setShowEdit(false)}>
@@ -232,6 +234,7 @@ function Members() {
                             <th className={classes.Th}>Age</th>
                             <th className={classes.Th}>Action</th>
                         </tr>
+
                         {data.map(([id, val], idx) => {
                             return (
                                 <tr key={id} className={classes.TrData}>
@@ -242,7 +245,9 @@ function Members() {
                                     <td className={classes.Td}>{val.startdate}</td>
                                     <td className={classes.Td}>{val.dateofbirth}</td>
                                     <td className={classes.TdButtons}>
-                                        <Button className={classes.ActionButtonTasks}>Tasks</Button>
+                                        <Link to={'/Login/Members/' + id + '/Tasks'}>
+                                            <Button className={classes.ActionButtonTasks}>Tasks</Button>
+                                        </Link>
                                         <Button className={classes.ActionButtonProgress}>Progress</Button>
                                         <Button className={classes.ActionButtonEdit} onClick={() => opedEdit(val, id)}>
                                             Edit
