@@ -383,3 +383,21 @@
     margin-top: 29px;
     margin-bottom: 29px;
 }
+.TasksMembersName{
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 26px;
+    align-items: center;
+    margin-top: 15px;
+}
+.MembersNameContainer{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    width: 350px;
+}
+.NewTasksName{
+    padding-left: 15px;
+    padding-bottom: 5px;
+}
