@@ -7,12 +7,11 @@ import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
 import { Form } from 'components/Form';
 import { getDatabase, ref, set, push, child, onValue, update, remove } from 'firebase/database';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, deleteUser } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import checkPassword from 'components/checkPassword';
 import classes from './pages.module.css';
 import '../firebs';
 import app from '../firebs';
-import { SaveButton } from 'components/Buttons/SaveButton/SaveButton';
 
 function Members() {
     const [showModal, setShowModal] = useState(false);
@@ -85,7 +84,6 @@ function Members() {
         const education = target.education.value;
         const university_average_score = target.university_average_score.value;
         const math_score = target.math_score.value;
-
         const userId = push(child(ref(database), 'users')).key;
         if (checkPassword(password, confirmpassword)) {
             set(ref(database, 'users/' + userId), {

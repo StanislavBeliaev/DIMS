@@ -1,15 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import Members from './Members';
 import app from '../firebs';
-import { getDatabase, ref, onValue, set, push, child } from 'firebase/database';
+import { ModalDelete } from 'components/Modal/ModalDelete';
+import { ModalEdit } from 'components/Modal/ModalEdit';
+import {
+    getDatabase,
+    ref,
+    onValue,
+    set,
+    push,
+    child,
+    remove,
+    update,
+    query,
+    orderByChild,
+    equalTo,
+    get,
+} from 'firebase/database';
 import { ModalCreateNewTask } from 'components/Modal/ModalCreateNewTask';
 import { FormCreateNewTask } from 'components/FormCreateNewTask';
 import { Button } from 'components/Buttons/Button/Button';
 import classes from './pages.module.css';
 import { Routes, Route, useParams } from 'react-router-dom';
+import { async } from '@firebase/util';
 
 function Tasks() {
     const [showCreateNewTask, setShowCreateNewTask] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [tasksID, setTasksID] = useState('');
+    const [currentTask, setCurrentTask] = useState({
+        name: '',
+        description: '',
+        startdate: '',
+        deadline: '',
+        assignedUsers: [],
+    });
+    const openDelete = (id) => {
+        setShowDelete((prev) => !prev);
+        setTasksID(id);
+    };
+    const openEdit = (user, id) => {
+        setShowEdit((prev) => !prev);
+        setTasksID(id);
+        setCurrentTask(user);
+    };
+
     const [member, setMember] = useState([]);
     const [tasksData, setTasksData] = useState([]);
     const openCreateNewTask = () => {
@@ -18,6 +54,22 @@ function Tasks() {
     const database = getDatabase(app);
     const [data, setData] = useState([]);
     const users = ref(database, 'users/');
+    const test = async () => {
+        const recentPostsRef = await get(query(ref(database, 'tasks'), orderByChild('deadline')));
+        console.log(recentPostsRef.val());
+        return recentPostsRef.val();
+    };
+    //  console.log(test());
+
+    // const getData = async () => {
+    //     const readNewLogEntries = await get(
+    //       query(ref(database, "tasks/"), orderByChild("assignedUser"))
+    //       // Filters where "type" is equal to "Request". Single arg here ⬆
+    //     );
+    //     console.log(readNewLogEntries.val())
+    //     return readNewLogEntries.val();
+    //   };
+    //   console.log(getData())
     useEffect(
         () =>
             onValue(users, (snapshot) => {
@@ -42,14 +94,35 @@ function Tasks() {
         const description = target.description.value;
         const startdate = target.date.value;
         const deadline = target.deadline.value;
-        const checkboxname = target.checkboxname.value;
+        const assignedUsers = target.assignedUsers.value;
         const taskId = push(child(ref(database), 'users')).key;
+        const usersTaskId = push(child(ref(database), 'users')).key;
         set(ref(database, 'tasks/' + taskId), {
             name: name,
             description: description,
             startdate: startdate,
             deadline: deadline,
-            checkboxname: member,
+            assignedUsers: member,
+        });
+        //     member.forEach((userId) => set(ref(database, 'userTasks/' + usersTaskId), {
+        //      taskId,
+        //      userId,
+        //  }))
+    }
+    function saveEditUsersTasks(e) {
+        e.preventDefault();
+        const target = e.target;
+        const name = target.name.value;
+        const description = target.description.value;
+        const startdate = target.date.value;
+        const deadline = target.deadline.value;
+        const assignedUsers = target.assignedUsers.value;
+        update(ref(database, 'tasks/' + tasksID), {
+            name: name,
+            description: description,
+            startdate: startdate,
+            deadline: deadline,
+            assignedUsers: currentTask.assignedUsers,
         });
     }
     const handleCheck = (event) => {
@@ -61,6 +134,20 @@ function Tasks() {
         }
         setMember(updatedList);
     };
+    const handleCheckEdit = (e) => {
+        let updatedList = [...currentTask.assignedUsers];
+        if (e.target.checked) {
+            updatedList = [...currentTask.assignedUsers, e.target.value];
+        } else {
+            updatedList.splice(currentTask.assignedUsers.indexOf(e.target.value), 1);
+        }
+        setCurrentTask({ ...currentTask, assignedUsers: updatedList });
+    };
+
+    function deleteTasks() {
+        remove(ref(database, 'tasks/' + tasksID));
+        setShowDelete(false);
+    }
     return (
         <div className={classes.TasksContainer}>
             <div className={classes.HeaderTasks}>
@@ -75,7 +162,7 @@ function Tasks() {
                         <p className={classes.HeaderNewTaskText}>Create new task</p>
                     </div>
                     <div className={classes.CreateNewTaskContent}>
-                        <FormCreateNewTask onSubmit={saveUsersTasks}>
+                        <FormCreateNewTask onSubmit={saveUsersTasks} task={currentTask} setTask={setCurrentTask}>
                             <div className={classes.TasksMembersName}>
                                 <label>Members</label>
                                 <div className={classes.MembersNameContainer}>
@@ -84,7 +171,7 @@ function Tasks() {
                                             <label className={classes.NewTasksName} key={id}>
                                                 <input
                                                     type='checkbox'
-                                                    name='checkboxname'
+                                                    name='assignedUsers'
                                                     value={id}
                                                     onChange={handleCheck}
                                                 />
@@ -107,7 +194,65 @@ function Tasks() {
                     </div>
                 </div>
             </ModalCreateNewTask>
+            <ModalDelete showDelete={showDelete} setShowDelete={setShowDelete}>
+                <div className={classes.ModalDeleteContainer}>
+                    <div className={classes.ModalDeleteHeader}>
+                        <p className={classes.ModalDeleteName}> Delete tasks </p>
+                    </div>
+                    <div className={classes.ModalDeleteTextContainer}>
+                        <p className={classes.ModalDeleteText}>Are you sure you want to delete the current tasks ?</p>
+                    </div>
+                    <div className={classes.ModalDeleteFooter}>
+                        <div className={classes.DeleteButtons}>
+                            <Button className={classes.ActionButtonDelete} onClick={deleteTasks}>
+                                Delete
+                            </Button>
+                            <Button className={classes.ButtonBack} onClick={() => setShowDelete(false)}>
+                                Back To List
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </ModalDelete>
+            <ModalEdit showEdit={showEdit} setShowEdit={setShowEdit}>
+                <div className={classes.CreateNewTaskContainer}>
+                    <div className={classes.HeaderNewTask}>
+                        <p className={classes.HeaderNewTaskText}>Edit task</p>
+                    </div>
+                    <div className={classes.CreateNewTaskContent}>
+                        <FormCreateNewTask onSubmit={saveEditUsersTasks} task={currentTask} setTask={setCurrentTask}>
+                            <div className={classes.TasksMembersName}>
+                                <label>Members</label>
+                                <div className={classes.MembersNameContainer}>
+                                    {data.map(([id, val], idx) => {
+                                        return (
+                                            <label className={classes.NewTasksName} key={id}>
+                                                <input
+                                                    type='checkbox'
+                                                    name='assignedUsers'
+                                                    value={id}
+                                                    checked={currentTask?.assignedUsers?.includes(id)}
+                                                    onChange={handleCheckEdit}
+                                                />
+                                                {val.name}
+                                            </label>
+                                        );
+                                    })}
+                                </div>
+                            </div>
 
+                            <div className={classes.CreateNewTaskFooter}>
+                                <Button className={classes.ButtonSave} type='submit'>
+                                    Save
+                                </Button>
+                                <Button className={classes.ButtonBack} onClick={() => setShowEdit(false)}>
+                                    Back To List
+                                </Button>
+                            </div>
+                        </FormCreateNewTask>
+                    </div>
+                </div>
+            </ModalEdit>
             <div className={classes.TasksTableContainer}>
                 <table className={classes.Table}>
                     <tbody>
@@ -128,8 +273,12 @@ function Tasks() {
                                     <td className={classes.Td}>{val.startdate}</td>
                                     <td className={classes.Td}>{val.deadline}</td>
                                     <td className={classes.TdButtons}>
-                                        <Button className={classes.ActionButtonEdit}>Edit</Button>
-                                        <Button className={classes.ActionButtonDelete}>Delete</Button>
+                                        <Button className={classes.ActionButtonEdit} onClick={() => openEdit(val, id)}>
+                                            Edit
+                                        </Button>
+                                        <Button className={classes.ActionButtonDelete} onClick={() => openDelete(id)}>
+                                            Delete
+                                        </Button>
                                     </td>
                                 </tr>
                             );

@@ -1,5 +1,8 @@
 {
   "rules": {
+    "tasks":{
+      ".indexOn": ["assignedUsers", "deadline"]
+    },
     ".read": true,
     ".write": true
   }
