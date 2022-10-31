@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'components/Buttons/Button/Button';
 import classes from '../pages/pages.module.css';
 export const Form = ({ children, onSubmit, user, setUser }) => {
+    /*eslint no-useless-escape: 1*/
+    const [emailError, setEmailError] = useState('');
+    const [emailCorrect, setEmailCorrect] = useState('');
+    const emailHandler = (e) => {
+        setUser({ ...user, email: e.target.value });
+        const re =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if (!re.test(String(e.target.value).toLowerCase())) {
+            setEmailError('wrong email');
+            setEmailCorrect('');
+        } else {
+            setEmailError('');
+            setEmailCorrect('Correct!');
+        }
+    };
     return (
         <form className={classes.Form} onSubmit={onSubmit}>
             <div className={classes.FormContent}>
@@ -31,18 +46,21 @@ export const Form = ({ children, onSubmit, user, setUser }) => {
                             onChange={(e) => setUser({ ...user, lastname: e.target.value })}
                         />
                     </label>
+
                     <label className={classes.FormLeft}>
                         Email
                         <input
                             className={classes.InputSize}
                             type='email'
-                            onChange={(e) => setUser({ ...user, email: e.target.value })}
+                            onChange={(e) => emailHandler(e)}
                             value={user.email}
                             name='email'
                             placeholder=' Email'
                             required
                         />
                     </label>
+                    {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+                    {emailCorrect && <div style={{ color: 'green' }}>{emailCorrect}</div>}
                     <label className={classes.FormLeft}>
                         Direction
                         <select
@@ -83,8 +101,8 @@ export const Form = ({ children, onSubmit, user, setUser }) => {
                             required
                         >
                             <option value='Member'>Member</option>
-                            <option value='Member'>Admin</option>
-                            <option value='Member'>Mentor</option>
+                            <option value='Admin'>Admin</option>
+                            <option value='Mentor'>Mentor</option>
                         </select>
                     </label>
                     <label className={classes.FormLeft}>
@@ -143,6 +161,7 @@ export const Form = ({ children, onSubmit, user, setUser }) => {
                             onChange={(e) => setUser({ ...user, phone: e.target.value })}
                             value={user.phone}
                             name='phone'
+                            placeholder='+375()123-456-789'
                             required
                         />
                     </label>

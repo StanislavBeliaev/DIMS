@@ -104,10 +104,10 @@ function Members() {
                 university_average_score: university_average_score,
                 math_score: math_score,
             });
+            createUserWithEmailAndPassword(auth, email, password);
+            sendEmailVerification(auth.currentUser);
         }
-        createUserWithEmailAndPassword(auth, email, password);
 
-        sendEmailVerification(auth.currentUser);
         console.log(sendEmailVerification);
     }
 
@@ -153,7 +153,6 @@ function Members() {
 
     function deleteUser() {
         remove(ref(database, 'users/' + currentId));
-
         setShowDelete(false);
     }
 
@@ -246,7 +245,9 @@ function Members() {
                                         <Link to={'/Login/Members/' + id + '/Tasks'}>
                                             <Button className={classes.ActionButtonTasks}>Tasks</Button>
                                         </Link>
-                                        <Button className={classes.ActionButtonProgress}>Progress</Button>
+                                        <Link to={'/Login/Members/' + id + '/MemberProgress'}>
+                                            <Button className={classes.ActionButtonProgress}>Progress</Button>
+                                        </Link>
                                         <Button className={classes.ActionButtonEdit} onClick={() => opedEdit(val, id)}>
                                             Edit
                                         </Button>

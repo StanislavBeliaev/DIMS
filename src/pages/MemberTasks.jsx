@@ -23,6 +23,17 @@ function MembersTasks() {
     const userID = useParams();
     const database = getDatabase(app);
     const [tasksData, setTasksData] = useState([]);
+    const [userData, setUserData] = useState([]);
+    const users = ref(database, 'users/');
+    useEffect(
+        () =>
+            onValue(users, (snapshot) => {
+                const data = snapshot.val();
+                setUserData(Object.entries(data).filter(([k, v]) => k.includes(userID.UserID)));
+            }),
+        [],
+    );
+    console.log(userData);
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
@@ -44,6 +55,13 @@ function MembersTasks() {
 
     return (
         <div className={classes.MembersTasksContainer}>
+            <p>
+                Hi! Dear{' '}
+                {userData.map(([id, val], idx) => {
+                    return val.name;
+                })}
+                ! There are your current tasks{' '}
+            </p>
             <table className={classes.Table}>
                 <tbody>
                     <tr className={classes.Tr}>

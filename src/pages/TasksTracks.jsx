@@ -26,6 +26,7 @@ import { useState, useEffect } from 'react';
 
 function TasksTracks() {
     const UserIDandTaksID = useParams();
+    console.log(UserIDandTaksID);
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const openDelete = (val, id) => {

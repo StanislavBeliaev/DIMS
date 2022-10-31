@@ -54,11 +54,6 @@ function Tasks() {
     const database = getDatabase(app);
     const [data, setData] = useState([]);
     const users = ref(database, 'users/');
-    const test = async () => {
-        const recentPostsRef = await get(query(ref(database, 'tasks'), orderByChild('deadline')));
-        console.log(recentPostsRef.val());
-        return recentPostsRef.val();
-    };
     //  console.log(test());
 
     // const getData = async () => {
@@ -78,6 +73,7 @@ function Tasks() {
             }),
         [],
     );
+    console.log(data);
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
@@ -87,6 +83,7 @@ function Tasks() {
             }),
         [],
     );
+    console.log(tasksData);
     function saveUsersTasks(e) {
         e.preventDefault();
         const target = e.target;
