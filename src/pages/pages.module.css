@@ -8,12 +8,23 @@
     height: 50px;
 }
 .MembersContainer{
-    flex-grow: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: auto;
+   margin-top: 20px;
 }
 .TableContainer{
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    flex-direction: column;
+    margin: auto;
+}
+.TableHeader__container{
+    display: flex;
+    width: 1012px;
+    justify-content: space-between;
+    align-items: center;
 }
 .MainMembers{
     font-size: 50px;
@@ -32,7 +43,6 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 21px;
-    margin-left: 1220px;
 }
 .Th{
     text-align: center;

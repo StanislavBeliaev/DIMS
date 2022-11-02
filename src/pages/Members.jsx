@@ -158,10 +158,6 @@ function Members() {
 
     return (
         <div className={classes.MembersContainer}>
-            <h1 className={classes.MainMembers}>Members</h1>
-            <Button className={classes.ButtonCreate} onClick={openModal}>
-                Create
-            </Button>
             {/* Modal Window for create member            */}
             <ModalCreate showModal={showModal} setShowModal={setShowModal}>
                 <div className={classes.ModalCreateContainer}>
@@ -220,6 +216,12 @@ function Members() {
             </ModalDelete>
 
             <div className={classes.TableContainer}>
+                <div className={classes.TableHeader__container}>
+                    <h1 className={classes.MainMembers}>Members</h1>
+                    <Button className={classes.ButtonCreate} onClick={openModal}>
+                        Create
+                    </Button>
+                </div>
                 <table className={classes.Table}>
                     <tbody>
                         <tr className={classes.Tr}>
