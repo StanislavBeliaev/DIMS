@@ -73,7 +73,7 @@ function Tasks() {
             }),
         [],
     );
-    console.log(data);
+
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
@@ -83,7 +83,7 @@ function Tasks() {
             }),
         [],
     );
-    console.log(tasksData);
+
     function saveUsersTasks(e) {
         e.preventDefault();
         const target = e.target;

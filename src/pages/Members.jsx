@@ -107,8 +107,6 @@ function Members() {
             createUserWithEmailAndPassword(auth, email, password);
             sendEmailVerification(auth.currentUser);
         }
-
-        console.log(sendEmailVerification);
     }
 
     function writeNewUserData(e) {

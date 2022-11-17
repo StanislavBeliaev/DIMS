@@ -42,7 +42,7 @@ function MembersProgress() {
             }),
         [],
     );
-    console.log(data);
+
     return (
         <div className={classes.MembersProgressContainer}>
             <p style={{ fontsize: 40 }}>

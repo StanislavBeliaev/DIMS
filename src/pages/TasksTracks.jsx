@@ -26,7 +26,6 @@ import { useState, useEffect } from 'react';
 
 function TasksTracks() {
     const UserIDandTaksID = useParams();
-    console.log(UserIDandTaksID);
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const openDelete = (val, id) => {
@@ -35,7 +34,6 @@ function TasksTracks() {
         setTaskTrackID(id);
     };
     const database = getDatabase(app);
-    console.log(UserIDandTaksID);
     const [showCreateNewTaskTrack, setShowCreateNewTaskTrack] = useState(false);
     const openModalCreateNewTaskTrack = () => {
         setShowCreateNewTaskTrack((prev) => !prev);
@@ -56,7 +54,7 @@ function TasksTracks() {
             }),
         [],
     );
-    console.log(taskTrackData);
+
     const [currentTaskTrack, setCurrentTaskTrack] = useState({
         task: '',
         date: '',

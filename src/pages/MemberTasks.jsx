@@ -33,7 +33,7 @@ function MembersTasks() {
             }),
         [],
     );
-    console.log(userData);
+
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
@@ -43,15 +43,6 @@ function MembersTasks() {
             }),
         [],
     );
-
-    console.log(tasksData);
-
-    // const test = async () => {
-    //     const recentPostsRef = await get( query(ref(database, 'tasks'), orderByChild('assignedUsers'), equalTo(userID.UserID)));
-    //     console.log(recentPostsRef.val());
-    //     return recentPostsRef.val();
-    // }
-    // console.log(test());
 
     return (
         <div className={classes.MembersTasksContainer}>
