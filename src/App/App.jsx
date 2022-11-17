@@ -22,6 +22,17 @@ import TasksTracks from 'pages/TasksTracks';
 function App() {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [accToken, setAccToken] = useState({ token: '' });
+    const [data, setData] = useState([]);
+    const database = getDatabase(app);
+    const users = ref(database, '/');
+    useEffect(
+        () =>
+            onValue(users, (snapshot) => {
+                const data = snapshot.val();
+                setData(data);
+            }),
+        [],
+    );
     const logOut = () => {
         setIsLoggedin(false);
         setAccToken({ token: '' });

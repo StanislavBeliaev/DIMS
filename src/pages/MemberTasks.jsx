@@ -20,16 +20,18 @@ import {
 } from 'firebase/database';
 
 function MembersTasks() {
-    const userID = useParams();
+    const params = useParams();
     const database = getDatabase(app);
     const [tasksData, setTasksData] = useState([]);
     const [userData, setUserData] = useState([]);
+    const [userName, setUserName] = useState('');
     const users = ref(database, 'users/');
     useEffect(
         () =>
             onValue(users, (snapshot) => {
                 const data = snapshot.val();
-                setUserData(Object.entries(data).filter(([k, v]) => k.includes(userID.UserID)));
+                setUserData(Object.entries(data).filter(([k, v]) => k.includes(params.UserID)));
+                setUserName(Object.entries(data).find(([k, v]) => k.includes(params.UserID))[1].name);
             }),
         [],
     );
@@ -39,20 +41,14 @@ function MembersTasks() {
         () =>
             onValue(tasks, (snapshot) => {
                 const data = snapshot.val();
-                setTasksData(Object.entries(data).filter(([k, v]) => v.assignedUsers.includes(userID.UserID)));
+                setTasksData(Object.entries(data).filter(([k, v]) => v.assignedUsers.includes(params.UserID)));
             }),
         [],
     );
 
     return (
         <div className={classes.MembersTasksContainer}>
-            <p>
-                Hi! Dear{' '}
-                {userData.map(([id, val], idx) => {
-                    return val.name;
-                })}
-                ! There are your current tasks{' '}
-            </p>
+            <p>Hi! Dear {userName}! There are your current tasks</p>
             <table className={classes.Table}>
                 <tbody>
                     <tr className={classes.Tr}>
@@ -68,7 +64,7 @@ function MembersTasks() {
                                 <td className={classes.Td}>{idx + 1}</td>
 
                                 <td className={classes.Td}>
-                                    <Link to={'/Login/Members/' + userID.UserID + '/TasksTracks/' + id}>
+                                    <Link to={'/Login/Members/' + params.UserID + '/TasksTracks/' + id}>
                                         {val.name}
                                     </Link>
                                 </td>
