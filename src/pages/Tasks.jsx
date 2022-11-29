@@ -54,17 +54,6 @@ function Tasks() {
     const database = getDatabase(app);
     const [data, setData] = useState([]);
     const users = ref(database, 'users/');
-    //  console.log(test());
-
-    // const getData = async () => {
-    //     const readNewLogEntries = await get(
-    //       query(ref(database, "tasks/"), orderByChild("assignedUser"))
-    //       // Filters where "type" is equal to "Request". Single arg here ⬆
-    //     );
-    //     console.log(readNewLogEntries.val())
-    //     return readNewLogEntries.val();
-    //   };
-    //   console.log(getData())
     useEffect(
         () =>
             onValue(users, (snapshot) => {

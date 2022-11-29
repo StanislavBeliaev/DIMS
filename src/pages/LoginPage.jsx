@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { FulldataContext } from 'App/App';
 import { Route, Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { UserFormSVG } from 'SVG/UserFormSVG';
@@ -6,21 +7,27 @@ import { PassFromSVG } from 'SVG/PassFormSVG';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Outlet, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUserProfile } from 'features/counter/userSlice';
 import PropTypes from 'prop-types';
 import classes from './pages.module.css';
 import { initializeApp } from 'firebase/app';
+import { useSelector } from 'react-redux';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import App from 'App/App';
 import app from '../firebs';
 
-function LoginPage({ login, setLogin, accToken, setAccToken }) {
+function LoginPage({ login, setLogin, accToken, setAccToken, userRole, setUserRole }) {
     let navigate = useNavigate();
-    function getUserProfile(email) {
-        return {
-            role: 'mentor',
-        };
+    let dispatch = useDispatch();
+    const fulldata = useSelector((state) => state.fulldata);
+    function getUserProfile(email, users) {
+        let [key, currentUser] = Object.entries(users).find(([key, currentUser]) => currentUser.email === email);
+        return { id: key, ...currentUser };
     }
 
+    // console.log(fulldata)
+    // console.log(Object.values(data.users).find(currentUser => currentUser.email === "777vaka777@mail.ru").role)
     function handleSubmit(e) {
         /*eslint no-debugger: 1*/
         e.preventDefault();
@@ -33,22 +40,28 @@ function LoginPage({ login, setLogin, accToken, setAccToken }) {
                 // Signed in
                 setAccToken({ token: userCredential.user.accessToken });
                 setLogin(true);
-
+                let currentUser = getUserProfile(userCredential._tokenResponse.email, fulldata.users);
+                // console.log(currentUser)
+                // console.log(Object.values(fulldata.users).find(currentUser => currentUser.email === userCredential._tokenResponse.email).role)
                 // ...
-                if (getUserProfile().role === 'admin') {
-                    navigate('/Login/Members/-NCV1nUF1ugaBxvVtsUI/Tasks');
-                } else {
-                    navigate('/Login/Members');
+                dispatch(setUserProfile(currentUser));
+
+                if (currentUser.role === 'Admin') {
+                    // navigate('/Login/Members/'+ currentUser.id+'/Tasks');
+                    navigate('/Members/');
+                }
+                if (currentUser.role === 'Mentor') {
+                    navigate('/Mentor/');
+                }
+                if (currentUser.role === 'Member') {
+                    navigate('/Member/' + currentUser.id + '/Tasks');
                 }
             })
 
-            .catch((error) => {});
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    // if (accToken.token) {
-    //     return <Outlet />;
-    // }else{
-    //    <Navigate to='/'/>
-    // }
 
     return (
         <div className={classes.LoginPage__Container}>
@@ -94,15 +107,6 @@ function LoginPage({ login, setLogin, accToken, setAccToken }) {
                                 Enter
                             </Button>
                         </Form>
-                        {/* <form onSubmit={handleSubmit}>
-                    <label>Username: </label>
-                    <input type='email' name='email' placeholder='email' required />
-                    <label>Password: </label>
-                    <input type='password' name='password' placeholder='password' required />
-                    <Button variant='primary' type='submit'>
-                        Submit
-                    </Button>
-                </form> */}
                     </div>
                 </div>
             </div>
@@ -116,5 +120,7 @@ LoginPage.propTypes = {
     setAccToken: PropTypes.func,
     shouldRedirect: PropTypes.bool,
     setShouldRedirect: PropTypes.func,
+    userRole: PropTypes.string,
+    setUserRole: PropTypes.string,
 };
 export default LoginPage;

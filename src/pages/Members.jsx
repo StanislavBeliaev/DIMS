@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
 import Tasks from './Tasks';
 import { Route, Link, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ModalCreate } from 'components/Modal/ModalCreate';
 import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
@@ -12,8 +13,10 @@ import checkPassword from 'components/checkPassword';
 import classes from './pages.module.css';
 import '../firebs';
 import app from '../firebs';
+import { Table } from 'components/Tables/MemberTable';
+import PropTypes from 'prop-types';
 
-function Members() {
+function Members({ linkPref }) {
     const [showModal, setShowModal] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
@@ -36,6 +39,8 @@ function Members() {
         math_score: '',
     });
     const [data, setData] = useState([]);
+    const usersData = useSelector((state) => state.fulldata.users);
+    const userRole = useSelector((state) => state.user.role);
     const [currentId, setCurrentId] = useState('');
     const opedEdit = (user, id) => {
         setShowEdit((prev) => !prev);
@@ -216,58 +221,27 @@ function Members() {
             <div className={classes.TableContainer}>
                 <div className={classes.TableHeader__container}>
                     <h1 className={classes.MainMembers}>Members</h1>
-                    <Button className={classes.ButtonCreate} onClick={openModal}>
-                        Create
-                    </Button>
+                    {userRole === 'Admin' ? (
+                        <Button className={classes.ButtonCreate} onClick={openModal}>
+                            Create
+                        </Button>
+                    ) : null}
                 </div>
-                <table className={classes.Table}>
-                    <tbody>
-                        <tr className={classes.Tr}>
-                            <th className={classes.Th}>#</th>
-                            <th className={classes.Th}>Full Name</th>
-                            <th className={classes.Th}>Direction</th>
-                            <th className={classes.Th}>Education</th>
-                            <th className={classes.Th}>Start</th>
-                            <th className={classes.Th}>Age</th>
-                            <th className={classes.Th}>Action</th>
-                        </tr>
-
-                        {data.map(([id, val], idx) => {
-                            return (
-                                <tr key={id} className={classes.TrData}>
-                                    <td className={classes.Td}>{idx + 1}</td>
-                                    <td className={classes.Td}>{val.name}</td>
-                                    <td className={classes.Td}>{val.direction}</td>
-                                    <td className={classes.Td}>{val.education}</td>
-                                    <td className={classes.Td}>{val.startdate}</td>
-                                    <td className={classes.Td}>{val.dateofbirth}</td>
-                                    <td className={classes.TdButtons}>
-                                        <Link to={'/Login/Members/' + id + '/Tasks'}>
-                                            <Button className={classes.ActionButtonTasks}>Tasks</Button>
-                                        </Link>
-                                        <Link to={'/Login/Members/' + id + '/MemberProgress'}>
-                                            <Button className={classes.ActionButtonProgress}>Progress</Button>
-                                        </Link>
-                                        <Button className={classes.ActionButtonEdit} onClick={() => opedEdit(val, id)}>
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            className={classes.ActionButtonDelete}
-                                            onClick={() => openDelete(val, id)}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <Table
+                    usersData={usersData}
+                    openDelete={openDelete}
+                    opedEdit={opedEdit}
+                    linkPref={linkPref}
+                    userRole={userRole}
+                />
             </div>
         </div>
     );
 }
 
-Members.propTypes = {};
+Members.propTypes = {
+    Table: PropTypes.func,
+    linkPref: PropTypes.string,
+};
 Members.defaultProps = {};
 export default Members;

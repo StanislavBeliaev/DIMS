@@ -10,23 +10,30 @@ import classes from '../App/App.module.css';
 import Tasks from 'pages/Tasks';
 import TasksTracks from 'pages/TasksTracks';
 
-export const SideBar = ({ burgerStatus, setBurgerStatus }) => {
+const rolesToLinks = {
+    Admin: [
+        { link: '/Tasks/', label: 'Tasks' },
+        { link: '/Members/', label: 'Members' },
+        { link: '/', label: 'Home' },
+        { link: '/', label: 'About Us' },
+    ],
+    Mentor: [
+        { link: '/MentorTasks/', label: 'Tasks' },
+        { link: '/MentorMembers/', label: 'Members' },
+        { link: '/', label: 'Home' },
+        { link: '/', label: 'About Us' },
+    ],
+};
+export const SideBar = ({ burgerStatus, setBurgerStatus, userRole }) => {
     return (
         <>
-            {burgerStatus ? (
+            {rolesToLinks[userRole] && burgerStatus ? (
                 <div className={classes.SideBar}>
-                    <Link to={'/Login/Members/Tasks'}>
-                        <button className={classes.BurgerButtons}>Tasks</button>
-                    </Link>
-                    <Link to={'/Login/Members/'}>
-                        <button className={classes.BurgerButtons}>Members</button>
-                    </Link>
-                    <Link to={'/'}>
-                        <button className={classes.BurgerButtons}>Home</button>
-                    </Link>
-                    <Link to={'/'}>
-                        <button className={classes.BurgerButtons}>About Us</button>
-                    </Link>
+                    {rolesToLinks[userRole].map(({ link, label }, idx) => (
+                        <Link to={link} key={idx}>
+                            <button className={classes.BurgerButtons}>{label}</button>
+                        </Link>
+                    ))}
                 </div>
             ) : null}
         </>
@@ -35,4 +42,5 @@ export const SideBar = ({ burgerStatus, setBurgerStatus }) => {
 SideBar.propTypes = {
     burgerStatus: PropTypes.bool,
     setBurgerStatus: PropTypes.func,
+    userRole: PropTypes.string,
 };

@@ -4,6 +4,7 @@ import '../firebs';
 import app from '../firebs';
 import { Routes, Route, Link, useParams } from 'react-router-dom';
 import classes from './pages.module.css';
+import { useSelector } from 'react-redux';
 import {
     getDatabase,
     ref,
@@ -18,19 +19,20 @@ import {
     equalTo,
     get,
 } from 'firebase/database';
+import { Table } from 'components/Tables/MemberTasksTable';
+import PropTypes from 'prop-types';
 
-function MembersTasks() {
+function MembersTasks({ linkPref }) {
     const params = useParams();
     const database = getDatabase(app);
     const [tasksData, setTasksData] = useState([]);
-    const [userData, setUserData] = useState([]);
     const [userName, setUserName] = useState('');
+    const userTasks = useSelector((state) => state.fulldata.tasks);
     const users = ref(database, 'users/');
     useEffect(
         () =>
             onValue(users, (snapshot) => {
                 const data = snapshot.val();
-                setUserData(Object.entries(data).filter(([k, v]) => k.includes(params.UserID)));
                 setUserName(Object.entries(data).find(([k, v]) => k.includes(params.UserID))[1].name);
             }),
         [],
@@ -49,34 +51,12 @@ function MembersTasks() {
     return (
         <div className={classes.MembersTasksContainer}>
             <p>Hi! Dear {userName}! There are your current tasks</p>
-            <table className={classes.Table}>
-                <tbody>
-                    <tr className={classes.Tr}>
-                        <th className={classes.Th}>#</th>
-                        <th className={classes.Th}>Task name</th>
-                        <th className={classes.Th}>Start date</th>
-                        <th className={classes.Th}>Deadline</th>
-                        <th className={classes.Th}>Status</th>
-                    </tr>
-                    {tasksData.map(([id, val], idx) => {
-                        return (
-                            <tr key={id} className={classes.TrData}>
-                                <td className={classes.Td}>{idx + 1}</td>
-
-                                <td className={classes.Td}>
-                                    <Link to={'/Login/Members/' + params.UserID + '/TasksTracks/' + id}>
-                                        {val.name}
-                                    </Link>
-                                </td>
-                                <td className={classes.Td}>{val.startdate}</td>
-                                <td className={classes.Td}>{val.deadline}</td>
-                                <td className={classes.Td}>{}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <Table userTasks={userTasks} params={params} linkPref={linkPref} />
         </div>
     );
 }
+MembersTasks.propTypes = {
+    Table: PropTypes.func,
+    linkPref: PropTypes.string,
+};
 export default MembersTasks;

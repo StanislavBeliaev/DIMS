@@ -7,13 +7,17 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 import './firebs';
+import store from 'App/store';
+import { Provider } from 'react-redux';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-    <Router>
-        <App />
-    </Router>,
+    <Provider store={store}>
+        <Router>
+            <App />
+        </Router>
+    </Provider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

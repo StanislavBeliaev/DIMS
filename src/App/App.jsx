@@ -4,6 +4,8 @@ import { Button } from 'components/Buttons/Button/Button';
 import { SideBar } from 'components/SideBar';
 import { getDatabase, ref, set, push, child, onValue, update, remove } from 'firebase/database';
 import { ProtectedRoute } from 'ProtectedRoute';
+import { ProtectedRouteMentor } from 'ProtectedRouteMentor';
+import { ProtectedRouteMember } from 'ProtectedRouteMember';
 import { LogoutSVG } from 'SVG/LogoutSVG';
 import { Outlet, Navigate } from 'react-router-dom';
 import { LoginSVG } from 'SVG/LoginSVG';
@@ -17,22 +19,30 @@ import MembersTasks from '../pages/MemberTasks';
 import LoginPage from '../pages/LoginPage';
 import classes from './App.module.css';
 import Tasks from 'pages/Tasks';
+import { useDispatch, useSelector } from 'react-redux';
+import { dataLoadedSuccess } from 'features/counter/dataSilce';
 import TasksTracks from 'pages/TasksTracks';
+import { Counter } from 'features/counter/Counter';
 
 function App() {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [accToken, setAccToken] = useState({ token: '' });
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
+    const userRole = useSelector((state) => state.user.role);
+    console.log(userRole);
+    const dispatch = useDispatch();
+
     const database = getDatabase(app);
-    const users = ref(database, '/');
+    const getfulldata = ref(database, '/');
     useEffect(
         () =>
-            onValue(users, (snapshot) => {
+            onValue(getfulldata, (snapshot) => {
                 const data = snapshot.val();
-                setData(data);
+                dispatch(dataLoadedSuccess(data));
             }),
         [],
     );
+
     const logOut = () => {
         setIsLoggedin(false);
         setAccToken({ token: '' });
@@ -42,7 +52,6 @@ function App() {
     const burger = () => {
         setBurgerStatus((prev) => !prev);
     };
-
     return (
         <div className={classes.Main}>
             <div className={classes.Header}>
@@ -71,7 +80,9 @@ function App() {
                 </div>
             </div>
             <div className={classes.ContentContainer}>
-                {isLoggedin ? <SideBar burgerStatus={burgerStatus} setBurgerStatus={setBurgerStatus} /> : null}
+                {isLoggedin ? (
+                    <SideBar burgerStatus={burgerStatus} setBurgerStatus={setBurgerStatus} userRole={userRole} />
+                ) : null}
                 <Routes>
                     <Route
                         exact
@@ -85,12 +96,27 @@ function App() {
                             />
                         }
                     ></Route>
-                    <Route element={<ProtectedRoute isLoggedin={isLoggedin} />}>
-                        <Route exact path='/Login/Members/' element={<Members />} />
-                        <Route exact path='/Login/Members/Tasks' element={<Tasks />} />
-                        <Route exact path='/Login/Members/:UserID/Tasks' element={<MembersTasks />} />
-                        <Route exact path='/Login/Members/:UserID/MemberProgress' element={<MembersProgress />} />
-                        <Route exact path='/Login/Members/:UserID/TasksTracks/:TaskID' element={<TasksTracks />} />
+                    <Route element={<ProtectedRoute isLoggedin={isLoggedin} role={userRole} />}>
+                        <Route exact path='/Members/' element={<Members linkPref={'/'} />} />
+                        <Route exact path='/Tasks/' element={<Tasks />} />
+                        <Route exact path='/:UserID/Tasks' element={<MembersTasks linkPref='/' />} />
+                        <Route exact path='/:UserID/MemberProgress' element={<MembersProgress />} />
+                        <Route exact path='/:UserID/TasksTracks/:TaskID' element={<TasksTracks />} />
+                    </Route>
+                    <Route element={<ProtectedRouteMentor isLoggedin={isLoggedin} role={userRole} />}>
+                        <Route exact path='/MentorMembers/' element={<Members linkPref={'/Mentor/'} />} />
+                        <Route exact path='/Mentor/:UserID/Tasks' element={<MembersTasks linkPref='/Mentor/' />} />
+                        <Route exact path='/Mentor/:UserID/MemberProgress' element={<MembersProgress />} />
+                        <Route exact path='/MentorTasks/' element={<Tasks />} />
+                        <Route exact path='/Mentor/:UserID/TasksTracks/:TaskID' element={<TasksTracks />} />
+                    </Route>
+                    <Route element={<ProtectedRouteMember isLoggedin={isLoggedin} role={userRole} />}>
+                        <Route exact path='/Member/:UserID/Tasks' element={<MembersTasks linkPref={'/Member/'} />} />
+                        <Route
+                            exact
+                            path='/Member/:UserID/TasksTracks/:TaskID'
+                            element={<TasksTracks linkPref={'/Member/'} />}
+                        />
                     </Route>
                 </Routes>
             </div>
