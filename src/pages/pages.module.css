@@ -1,11 +1,30 @@
+.LoginPage__Container{
+    background-image: url("../../public/background.png");
+    width: 100%;
+}
+.LoginForm__Logo{
+    background-image: url("../../public/logo.png");
+    width: 44px;
+    height: 50px;
+}
 .MembersContainer{
-    flex-grow: 1;
-    
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: auto;
+   margin-top: 20px;
 }
 .TableContainer{
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    flex-direction: column;
+    margin: auto;
+}
+.TableHeader__container{
+    display: flex;
+    width: 1012px;
+    justify-content: space-between;
+    align-items: center;
 }
 .MainMembers{
     font-size: 50px;
@@ -24,14 +43,19 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 21px;
-    margin-left: 1220px;
 }
 .Th{
+    text-align: center;
     border: 1px solid black;
     background-color: #e5e5e5;
     height: 50px;
 }
-
+.Th:first-child{
+    width: 50px;
+}
+.Th:nth-child(2n){
+    width: 110px;
+}
 .Tr{
 
     background-color: #e5e5e5;
@@ -446,4 +470,68 @@
 .InputSizeNote{
     height: 96px;
     
+}
+.LoginForm{
+    width: 578px;
+    display: flex;
+    flex-direction: column;
+    height: 165px;
+}
+.LoginForm__Container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    width: 1220px;
+    margin-top: 50px;
+}
+.LoginForm__ContainerGlobal{
+    display: flex;
+    justify-content: center;
+}
+.LoginForm__Header{
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    background-color: #0e1a35;
+    color: #ffffff;
+}
+.LoginForm__Form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 605px;
+    
+}
+.form__control{
+    border: none;
+    border-bottom: 1px solid #d4d9e3;
+    border-radius: 0px;
+    
+}
+.Form__svg__container{
+    display: flex;
+    align-items: center;
+}
+.LoginForm__Name{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.LoginForm__LogoName{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 25px;
+    padding-right: 100px;
+    width: 277px;
+    height: 100%;
+}
+.Button__enter{
+    margin-top: 35px;
+}
+.MembersProgressContainer{
+    margin: 50px auto;
 }

@@ -22,10 +22,12 @@ import {
 } from 'firebase/database';
 import app from '../firebs';
 import { Routes, Route, Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 
 function TasksTracks() {
     const UserIDandTaksID = useParams();
+    const userRole = useSelector((state) => state.user.role);
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const openDelete = (val, id) => {
@@ -34,7 +36,6 @@ function TasksTracks() {
         setTaskTrackID(id);
     };
     const database = getDatabase(app);
-    console.log(UserIDandTaksID);
     const [showCreateNewTaskTrack, setShowCreateNewTaskTrack] = useState(false);
     const openModalCreateNewTaskTrack = () => {
         setShowCreateNewTaskTrack((prev) => !prev);
@@ -55,7 +56,7 @@ function TasksTracks() {
             }),
         [],
     );
-    console.log(taskTrackData);
+
     const [currentTaskTrack, setCurrentTaskTrack] = useState({
         task: '',
         date: '',
@@ -105,9 +106,13 @@ function TasksTracks() {
         <div className={classes.TasksTracksContainer}>
             <div className={classes.TasksTracksHeader}>
                 <p className={classes.TasksTracksName}>TasksTracks</p>
-                <Button className={classes.ButtonCreateTasks} onClick={openModalCreateNewTaskTrack}>
-                    Create
-                </Button>
+                {userRole === 'Admin' || userRole === 'Member' ? (
+                    <>
+                        <Button className={classes.ButtonCreateTasks} onClick={openModalCreateNewTaskTrack}>
+                            Create
+                        </Button>
+                    </>
+                ) : null}
             </div>
             <ModalCreateNewTaskTarack
                 showCreateNewTaskTrack={showCreateNewTaskTrack}
@@ -179,7 +184,7 @@ function TasksTracks() {
                         <th className={classes.Th}>Tasks</th>
                         <th className={classes.Th}>Note</th>
                         <th className={classes.Th}>Date</th>
-                        <th className={classes.Th}>Action</th>
+                        {userRole === 'Admin' || userRole === 'Member' ? <th className={classes.Th}>Action</th> : null}
                     </tr>
                     {taskTrackData.map(([id, val], idx) => {
                         return (
@@ -189,12 +194,22 @@ function TasksTracks() {
                                 <td className={classes.Td}>{val.note}</td>
                                 <td className={classes.Td}>{val.date}</td>
                                 <td className={classes.Td}>
-                                    <Button className={classes.ActionButtonEdit} onClick={() => openEdit(val, id)}>
-                                        Edit
-                                    </Button>
-                                    <Button className={classes.ActionButtonDelete} onClick={() => openDelete(val, id)}>
-                                        Delete
-                                    </Button>
+                                    {userRole === 'Admin' || userRole === 'Member' ? (
+                                        <>
+                                            <Button
+                                                className={classes.ActionButtonEdit}
+                                                onClick={() => openEdit(val, id)}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                className={classes.ActionButtonDelete}
+                                                onClick={() => openDelete(val, id)}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </>
+                                    ) : null}
                                 </td>
                             </tr>
                         );

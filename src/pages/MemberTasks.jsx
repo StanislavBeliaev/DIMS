@@ -4,6 +4,7 @@ import '../firebs';
 import app from '../firebs';
 import { Routes, Route, Link, useParams } from 'react-router-dom';
 import classes from './pages.module.css';
+import { useSelector } from 'react-redux';
 import {
     getDatabase,
     ref,
@@ -18,60 +19,44 @@ import {
     equalTo,
     get,
 } from 'firebase/database';
+import { Table } from 'components/Tables/MemberTasksTable';
+import PropTypes from 'prop-types';
 
-function MembersTasks() {
-    const userID = useParams();
+function MembersTasks({ linkPref }) {
+    const params = useParams();
     const database = getDatabase(app);
     const [tasksData, setTasksData] = useState([]);
+    const [userName, setUserName] = useState('');
+    const userTasks = useSelector((state) => state.fulldata.tasks);
+    const users = ref(database, 'users/');
+    useEffect(
+        () =>
+            onValue(users, (snapshot) => {
+                const data = snapshot.val();
+                setUserName(Object.entries(data).find(([k, v]) => k.includes(params.UserID))[1].name);
+            }),
+        [],
+    );
+
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
             onValue(tasks, (snapshot) => {
                 const data = snapshot.val();
-                setTasksData(Object.entries(data).filter(([k, v]) => v.assignedUsers.includes(userID.UserID)));
+                setTasksData(Object.entries(data).filter(([k, v]) => v.assignedUsers.includes(params.UserID)));
             }),
         [],
     );
 
-    console.log(tasksData);
-
-    // const test = async () => {
-    //     const recentPostsRef = await get( query(ref(database, 'tasks'), orderByChild('assignedUsers'), equalTo(userID.UserID)));
-    //     console.log(recentPostsRef.val());
-    //     return recentPostsRef.val();
-    // }
-    // console.log(test());
-
     return (
         <div className={classes.MembersTasksContainer}>
-            <table className={classes.Table}>
-                <tbody>
-                    <tr className={classes.Tr}>
-                        <th className={classes.Th}>#</th>
-                        <th className={classes.Th}>Task name</th>
-                        <th className={classes.Th}>Start date</th>
-                        <th className={classes.Th}>Deadline</th>
-                        <th className={classes.Th}>Status</th>
-                    </tr>
-                    {tasksData.map(([id, val], idx) => {
-                        return (
-                            <tr key={id} className={classes.TrData}>
-                                <td className={classes.Td}>{idx + 1}</td>
-
-                                <td className={classes.Td}>
-                                    <Link to={'/Login/Members/' + userID.UserID + '/TasksTracks/' + id}>
-                                        {val.name}
-                                    </Link>
-                                </td>
-                                <td className={classes.Td}>{val.startdate}</td>
-                                <td className={classes.Td}>{val.deadline}</td>
-                                <td className={classes.Td}>{}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <p>Hi! Dear {userName}! There are your current tasks</p>
+            <Table userTasks={userTasks} params={params} linkPref={linkPref} />
         </div>
     );
 }
+MembersTasks.propTypes = {
+    Table: PropTypes.func,
+    linkPref: PropTypes.string,
+};
 export default MembersTasks;

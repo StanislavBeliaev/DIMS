@@ -54,22 +54,6 @@ function Tasks() {
     const database = getDatabase(app);
     const [data, setData] = useState([]);
     const users = ref(database, 'users/');
-    const test = async () => {
-        const recentPostsRef = await get(query(ref(database, 'tasks'), orderByChild('deadline')));
-        console.log(recentPostsRef.val());
-        return recentPostsRef.val();
-    };
-    //  console.log(test());
-
-    // const getData = async () => {
-    //     const readNewLogEntries = await get(
-    //       query(ref(database, "tasks/"), orderByChild("assignedUser"))
-    //       // Filters where "type" is equal to "Request". Single arg here ⬆
-    //     );
-    //     console.log(readNewLogEntries.val())
-    //     return readNewLogEntries.val();
-    //   };
-    //   console.log(getData())
     useEffect(
         () =>
             onValue(users, (snapshot) => {
@@ -78,6 +62,7 @@ function Tasks() {
             }),
         [],
     );
+
     const tasks = ref(database, 'tasks/');
     useEffect(
         () =>
@@ -87,6 +72,7 @@ function Tasks() {
             }),
         [],
     );
+
     function saveUsersTasks(e) {
         e.preventDefault();
         const target = e.target;
