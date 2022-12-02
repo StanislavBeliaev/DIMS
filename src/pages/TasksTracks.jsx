@@ -4,6 +4,7 @@ import { ModalCreateNewTaskTarack } from 'components/Modal/ModalCreateNewTaskTra
 import { FormCreateNewTaskTrack } from 'components/FormNewTaskTrack';
 import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
+import PropTypes from 'prop-types';
 import classes from './pages.module.css';
 import '../firebs';
 import {
@@ -25,7 +26,7 @@ import { Routes, Route, Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 
-function TasksTracks() {
+function TasksTracks({ linkPref }) {
     const UserIDandTaksID = useParams();
     const userRole = useSelector((state) => state.user.role);
     const [showEdit, setShowEdit] = useState(false);
@@ -102,10 +103,16 @@ function TasksTracks() {
 
         setShowDelete(false);
     }
+    const userID = useSelector((state) => state.user.id);
     return (
         <div className={classes.TasksTracksContainer}>
             <div className={classes.TasksTracksHeader}>
                 <p className={classes.TasksTracksName}>TasksTracks</p>
+            </div>
+            <div className={classes.TasksTracksButtons}>
+                <Link to={linkPref + userID + '/Tasks'}>
+                    <Button className={classes.ActionButtonTasks}>BackToList</Button>
+                </Link>
                 {userRole === 'Admin' || userRole === 'Member' ? (
                     <>
                         <Button className={classes.ButtonCreateTasks} onClick={openModalCreateNewTaskTrack}>
@@ -219,5 +226,7 @@ function TasksTracks() {
         </div>
     );
 }
-
+TasksTracks.propTypes = {
+    linkPref: PropTypes.string,
+};
 export default TasksTracks;

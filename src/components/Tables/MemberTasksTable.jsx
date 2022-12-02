@@ -1,10 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classes from '../../pages/pages.module.css';
+import app from '../../firebs';
 import { Link } from 'react-router-dom';
-import { Button } from 'components/Buttons/Button/Button';
+import { useSelector } from 'react-redux';
+import {
+    getDatabase,
+    ref,
+    onValue,
+    set,
+    push,
+    child,
+    remove,
+    update,
+    query,
+    orderByChild,
+    equalTo,
+    get,
+} from 'firebase/database';
+import Button from 'react-bootstrap/Button';
 
-export const Table = ({ userTasks, params, linkPref }) => {
+export const Table = ({ userTasks, params, linkPref, userRole }) => {
+    /*eslint no-debugger: 1*/
+    const userID = useSelector((state) => state.user.id);
+    const database = getDatabase(app);
+    // const [statuses,setStatuses] = useState({});
+    // const updateItemStatus = (id,newStatus) => setStatuses({...statuses,[id]:newStatus})
+    const statusChange = (id, val, newStatus) => {
+        update(ref(database, 'tasks/' + id), {
+            name: val.name,
+            description: val.description,
+            startdate: val.startdate,
+            deadline: val.deadline,
+            assignedUsers: val.assignedUsers,
+            status: newStatus,
+        });
+    };
+    // useEffect(() => { console.log(statuses)}, [statuses])
+    const colors = {
+        Success: 'Green',
+        Active: 'Blue',
+        Fail: 'Red',
+    };
+    console.log(colors);
     return (
         <table className={classes.Table}>
             <tbody>
@@ -14,6 +52,7 @@ export const Table = ({ userTasks, params, linkPref }) => {
                     <th className={classes.Th}>Start date</th>
                     <th className={classes.Th}>Deadline</th>
                     <th className={classes.Th}>Status</th>
+                    {userRole === 'Mentor' ? <th className={classes.Th}>Update status</th> : null}
                 </tr>
                 {Object.entries(userTasks)
                     .filter(([k, v]) => v.assignedUsers.includes(params.UserID))
@@ -27,7 +66,27 @@ export const Table = ({ userTasks, params, linkPref }) => {
                                 </td>
                                 <td className={classes.Td}>{val.startdate}</td>
                                 <td className={classes.Td}>{val.deadline}</td>
-                                <td className={classes.Td}>{}</td>
+                                <td className={classes.Td} style={{ color: colors[val.status] }}>
+                                    {val.status}
+                                </td>
+                                {userRole === 'Mentor' ? (
+                                    <td className={classes.TdButtons}>
+                                        <Button
+                                            variant='success'
+                                            onClick={function () {
+                                                statusChange(id, val, 'Success');
+                                            }}
+                                        >
+                                            Success
+                                        </Button>
+                                        <Button variant='primary' onClick={() => statusChange(id, val, 'Active')}>
+                                            Active
+                                        </Button>
+                                        <Button variant='danger' onClick={() => statusChange(id, val, 'Fail')}>
+                                            Fail
+                                        </Button>
+                                    </td>
+                                ) : null}
                             </tr>
                         );
                     })}
@@ -39,4 +98,5 @@ Table.propTypes = {
     userTasks: PropTypes.object,
     params: PropTypes.object,
     linkPref: PropTypes.string,
+    userRole: PropTypes.string,
 };

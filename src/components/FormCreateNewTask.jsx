@@ -52,6 +52,15 @@ export const FormCreateNewTask = ({ children, onSubmit, task, setTask }) => {
                     required
                 />
             </label>
+            <label className={classes.FormCreateNewTaskContent}>
+                <input
+                    type='hidden'
+                    className={classes.InputSize}
+                    name='status'
+                    value={task.status}
+                    onChange={(e) => setTask({ ...task, status: e.target.value })}
+                />
+            </label>
             {children}
         </form>
     );

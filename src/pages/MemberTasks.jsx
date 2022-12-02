@@ -23,11 +23,14 @@ import { Table } from 'components/Tables/MemberTasksTable';
 import PropTypes from 'prop-types';
 
 function MembersTasks({ linkPref }) {
+    /*eslint no-debugger: 1*/
     const params = useParams();
     const database = getDatabase(app);
     const [tasksData, setTasksData] = useState([]);
     const [userName, setUserName] = useState('');
     const userTasks = useSelector((state) => state.fulldata.tasks);
+    const userRole = useSelector((state) => state.user.role);
+
     const users = ref(database, 'users/');
     useEffect(
         () =>
@@ -37,21 +40,15 @@ function MembersTasks({ linkPref }) {
             }),
         [],
     );
-
-    const tasks = ref(database, 'tasks/');
-    useEffect(
-        () =>
-            onValue(tasks, (snapshot) => {
-                const data = snapshot.val();
-                setTasksData(Object.entries(data).filter(([k, v]) => v.assignedUsers.includes(params.UserID)));
-            }),
-        [],
-    );
-
     return (
         <div className={classes.MembersTasksContainer}>
-            <p>Hi! Dear {userName}! There are your current tasks</p>
-            <Table userTasks={userTasks} params={params} linkPref={linkPref} />
+            {userRole === 'Admin' || userRole === 'Mentor' ? (
+                <p className={classes.MembersTasksText}>{userName} current tasks</p>
+            ) : (
+                <p className={classes.MembersTasksText}>Hi! Dear {userName}! There are your current tasks</p>
+            )}
+
+            <Table userTasks={userTasks} params={params} linkPref={linkPref} userRole={userRole} />
         </div>
     );
 }

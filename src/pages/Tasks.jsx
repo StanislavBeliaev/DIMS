@@ -35,7 +35,9 @@ function Tasks() {
         startdate: '',
         deadline: '',
         assignedUsers: [],
+        status: '',
     });
+
     const openDelete = (id) => {
         setShowDelete((prev) => !prev);
         setTasksID(id);
@@ -50,6 +52,7 @@ function Tasks() {
     const [tasksData, setTasksData] = useState([]);
     const openCreateNewTask = () => {
         setShowCreateNewTask((prev) => !prev);
+        setMember([]);
     };
     const database = getDatabase(app);
     const [data, setData] = useState([]);
@@ -72,6 +75,8 @@ function Tasks() {
             }),
         [],
     );
+    const [memberCheck, setMemberCheck] = useState('At least one member must be assigned');
+    useEffect(() => (member.length < 1 ? setMemberCheck('At least one member must be assigned') : setMemberCheck('')));
 
     function saveUsersTasks(e) {
         e.preventDefault();
@@ -81,19 +86,19 @@ function Tasks() {
         const startdate = target.date.value;
         const deadline = target.deadline.value;
         const assignedUsers = target.assignedUsers.value;
+        const status = target.status.value;
         const taskId = push(child(ref(database), 'users')).key;
         const usersTaskId = push(child(ref(database), 'users')).key;
-        set(ref(database, 'tasks/' + taskId), {
-            name: name,
-            description: description,
-            startdate: startdate,
-            deadline: deadline,
-            assignedUsers: member,
-        });
-        //     member.forEach((userId) => set(ref(database, 'userTasks/' + usersTaskId), {
-        //      taskId,
-        //      userId,
-        //  }))
+        member.length > 0
+            ? set(ref(database, 'tasks/' + taskId), {
+                  name: name,
+                  description: description,
+                  startdate: startdate,
+                  deadline: deadline,
+                  assignedUsers: member,
+                  status: status,
+              })
+            : false;
     }
     function saveEditUsersTasks(e) {
         e.preventDefault();
@@ -103,13 +108,17 @@ function Tasks() {
         const startdate = target.date.value;
         const deadline = target.deadline.value;
         const assignedUsers = target.assignedUsers.value;
-        update(ref(database, 'tasks/' + tasksID), {
-            name: name,
-            description: description,
-            startdate: startdate,
-            deadline: deadline,
-            assignedUsers: currentTask.assignedUsers,
-        });
+        const status = target.status.value;
+        currentTask.assignedUsers.length > 0
+            ? update(ref(database, 'tasks/' + tasksID), {
+                  name: name,
+                  description: description,
+                  startdate: startdate,
+                  deadline: deadline,
+                  assignedUsers: currentTask.assignedUsers,
+                  status: status,
+              })
+            : false;
     }
     const handleCheck = (event) => {
         let updatedList = [...member];
@@ -151,20 +160,23 @@ function Tasks() {
                         <FormCreateNewTask onSubmit={saveUsersTasks} task={currentTask} setTask={setCurrentTask}>
                             <div className={classes.TasksMembersName}>
                                 <label>Members</label>
-                                <div className={classes.MembersNameContainer}>
-                                    {data.map(([id, val], idx) => {
-                                        return (
-                                            <label className={classes.NewTasksName} key={id}>
-                                                <input
-                                                    type='checkbox'
-                                                    name='assignedUsers'
-                                                    value={id}
-                                                    onChange={handleCheck}
-                                                />
-                                                {val.name}
-                                            </label>
-                                        );
-                                    })}
+                                <div className={classes.MembersNameFlexContainer}>
+                                    <div className={classes.MembersNameContainer}>
+                                        {data.map(([id, val], idx) => {
+                                            return (
+                                                <label className={classes.NewTasksName} key={id}>
+                                                    <input
+                                                        type='checkbox'
+                                                        name='assignedUsers'
+                                                        value={id}
+                                                        onChange={handleCheck}
+                                                    />
+                                                    {val.name}
+                                                </label>
+                                            );
+                                        })}
+                                    </div>
+                                    {memberCheck && <div style={{ color: 'red' }}>{memberCheck}</div>}
                                 </div>
                             </div>
 
