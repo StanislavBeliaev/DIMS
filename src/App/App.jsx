@@ -23,13 +23,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dataLoadedSuccess } from 'features/counter/dataSilce';
 import TasksTracks from 'pages/TasksTracks';
 import { Counter } from 'features/counter/Counter';
+import 'constants';
+import { Admin } from 'constants';
+import { Mentor } from 'constants';
 
 function App() {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [accToken, setAccToken] = useState({ token: '' });
     const [data, setData] = useState({});
     const userRole = useSelector((state) => state.user.role);
-    console.log(userRole);
     const dispatch = useDispatch();
 
     const database = getDatabase(app);
@@ -56,9 +58,11 @@ function App() {
         <div className={classes.Main}>
             <div className={classes.Header}>
                 <div className={classes.Header__Menu}>
-                    <Button className={classes.burgerMenu} onClick={burger}>
-                        <BurgetMenuSVG />
-                    </Button>
+                    {userRole === Admin || userRole === Mentor ? (
+                        <Button className={classes.burgerMenu} onClick={burger}>
+                            <BurgetMenuSVG />
+                        </Button>
+                    ) : null}
                     <span className={classes.LogoName}>DIMS</span>
                 </div>
                 <div className={classes.ButtonContainer}>
@@ -101,14 +105,18 @@ function App() {
                         <Route exact path='/Tasks/' element={<Tasks />} />
                         <Route exact path='/:UserID/Tasks' element={<MembersTasks linkPref='/' />} />
                         <Route exact path='/:UserID/MemberProgress' element={<MembersProgress />} />
-                        <Route exact path='/:UserID/TasksTracks/:TaskID' element={<TasksTracks />} />
+                        <Route exact path='/:UserID/TasksTracks/:TaskID' element={<TasksTracks linkPref={'/'} />} />
                     </Route>
                     <Route element={<ProtectedRouteMentor isLoggedin={isLoggedin} role={userRole} />}>
                         <Route exact path='/MentorMembers/' element={<Members linkPref={'/Mentor/'} />} />
                         <Route exact path='/Mentor/:UserID/Tasks' element={<MembersTasks linkPref='/Mentor/' />} />
                         <Route exact path='/Mentor/:UserID/MemberProgress' element={<MembersProgress />} />
                         <Route exact path='/MentorTasks/' element={<Tasks />} />
-                        <Route exact path='/Mentor/:UserID/TasksTracks/:TaskID' element={<TasksTracks />} />
+                        <Route
+                            exact
+                            path='/Mentor/:UserID/TasksTracks/:TaskID'
+                            element={<TasksTracks linkPref={'/Mentor/'} />}
+                        />
                     </Route>
                     <Route element={<ProtectedRouteMember isLoggedin={isLoggedin} role={userRole} />}>
                         <Route exact path='/Member/:UserID/Tasks' element={<MembersTasks linkPref={'/Member/'} />} />

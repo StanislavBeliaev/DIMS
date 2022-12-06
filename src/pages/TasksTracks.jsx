@@ -4,6 +4,7 @@ import { ModalCreateNewTaskTarack } from 'components/Modal/ModalCreateNewTaskTra
 import { FormCreateNewTaskTrack } from 'components/FormNewTaskTrack';
 import { ModalEdit } from 'components/Modal/ModalEdit';
 import { ModalDelete } from 'components/Modal/ModalDelete';
+import PropTypes from 'prop-types';
 import classes from './pages.module.css';
 import '../firebs';
 import {
@@ -24,8 +25,10 @@ import app from '../firebs';
 import { Routes, Route, Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { Admin } from 'constants';
+import { Member } from 'constants';
 
-function TasksTracks() {
+function TasksTracks({ linkPref }) {
     const UserIDandTaksID = useParams();
     const userRole = useSelector((state) => state.user.role);
     const [showEdit, setShowEdit] = useState(false);
@@ -102,11 +105,17 @@ function TasksTracks() {
 
         setShowDelete(false);
     }
+    const userID = useSelector((state) => state.user.id);
     return (
         <div className={classes.TasksTracksContainer}>
             <div className={classes.TasksTracksHeader}>
                 <p className={classes.TasksTracksName}>TasksTracks</p>
-                {userRole === 'Admin' || userRole === 'Member' ? (
+            </div>
+            <div className={classes.TasksTracksButtons}>
+                <Link to={linkPref + userID + '/Tasks'}>
+                    <Button className={classes.ActionButtonTasks}>BackToList</Button>
+                </Link>
+                {userRole === Admin || userRole === Member ? (
                     <>
                         <Button className={classes.ButtonCreateTasks} onClick={openModalCreateNewTaskTrack}>
                             Create
@@ -184,7 +193,7 @@ function TasksTracks() {
                         <th className={classes.Th}>Tasks</th>
                         <th className={classes.Th}>Note</th>
                         <th className={classes.Th}>Date</th>
-                        {userRole === 'Admin' || userRole === 'Member' ? <th className={classes.Th}>Action</th> : null}
+                        {userRole === Admin || userRole === Member ? <th className={classes.Th}>Action</th> : null}
                     </tr>
                     {taskTrackData.map(([id, val], idx) => {
                         return (
@@ -194,7 +203,7 @@ function TasksTracks() {
                                 <td className={classes.Td}>{val.note}</td>
                                 <td className={classes.Td}>{val.date}</td>
                                 <td className={classes.Td}>
-                                    {userRole === 'Admin' || userRole === 'Member' ? (
+                                    {userRole === Admin || userRole === Member ? (
                                         <>
                                             <Button
                                                 className={classes.ActionButtonEdit}
@@ -219,5 +228,7 @@ function TasksTracks() {
         </div>
     );
 }
-
+TasksTracks.propTypes = {
+    linkPref: PropTypes.string,
+};
 export default TasksTracks;

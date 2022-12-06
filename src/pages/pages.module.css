@@ -535,3 +535,25 @@
 .MembersProgressContainer{
     margin: 50px auto;
 }
+.MembersNameFlexContainer{
+    display: flex;
+    flex-direction: column;
+}
+.MembersTasksContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 20px;
+}
+.MembersTasksText{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 21px;
+}
+.TasksTracksButtons{
+    display: flex;
+    justify-content: space-between;
+}

@@ -15,6 +15,7 @@ import '../firebs';
 import app from '../firebs';
 import { Table } from 'components/Tables/MemberTable';
 import PropTypes from 'prop-types';
+import { Admin } from 'constants';
 
 function Members({ linkPref }) {
     const [showModal, setShowModal] = useState(false);
@@ -221,7 +222,7 @@ function Members({ linkPref }) {
             <div className={classes.TableContainer}>
                 <div className={classes.TableHeader__container}>
                     <h1 className={classes.MainMembers}>Members</h1>
-                    {userRole === 'Admin' ? (
+                    {userRole === Admin ? (
                         <Button className={classes.ButtonCreate} onClick={openModal}>
                             Create
                         </Button>

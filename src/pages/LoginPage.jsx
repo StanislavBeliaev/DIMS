@@ -26,8 +26,6 @@ function LoginPage({ login, setLogin, accToken, setAccToken, userRole, setUserRo
         return { id: key, ...currentUser };
     }
 
-    // console.log(fulldata)
-    // console.log(Object.values(data.users).find(currentUser => currentUser.email === "777vaka777@mail.ru").role)
     function handleSubmit(e) {
         /*eslint no-debugger: 1*/
         e.preventDefault();
@@ -41,17 +39,13 @@ function LoginPage({ login, setLogin, accToken, setAccToken, userRole, setUserRo
                 setAccToken({ token: userCredential.user.accessToken });
                 setLogin(true);
                 let currentUser = getUserProfile(userCredential._tokenResponse.email, fulldata.users);
-                // console.log(currentUser)
-                // console.log(Object.values(fulldata.users).find(currentUser => currentUser.email === userCredential._tokenResponse.email).role)
-                // ...
                 dispatch(setUserProfile(currentUser));
 
                 if (currentUser.role === 'Admin') {
-                    // navigate('/Login/Members/'+ currentUser.id+'/Tasks');
                     navigate('/Members/');
                 }
                 if (currentUser.role === 'Mentor') {
-                    navigate('/Mentor/');
+                    navigate('/MentorMembers/');
                 }
                 if (currentUser.role === 'Member') {
                     navigate('/Member/' + currentUser.id + '/Tasks');
@@ -59,7 +53,7 @@ function LoginPage({ login, setLogin, accToken, setAccToken, userRole, setUserRo
             })
 
             .catch((error) => {
-                console.log(error);
+                alert(error);
             });
     }
 
