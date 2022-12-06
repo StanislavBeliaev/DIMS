@@ -25,6 +25,8 @@ import app from '../firebs';
 import { Routes, Route, Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { Admin } from 'constants';
+import { Member } from 'constants';
 
 function TasksTracks({ linkPref }) {
     const UserIDandTaksID = useParams();
@@ -113,7 +115,7 @@ function TasksTracks({ linkPref }) {
                 <Link to={linkPref + userID + '/Tasks'}>
                     <Button className={classes.ActionButtonTasks}>BackToList</Button>
                 </Link>
-                {userRole === 'Admin' || userRole === 'Member' ? (
+                {userRole === Admin || userRole === Member ? (
                     <>
                         <Button className={classes.ButtonCreateTasks} onClick={openModalCreateNewTaskTrack}>
                             Create
@@ -191,7 +193,7 @@ function TasksTracks({ linkPref }) {
                         <th className={classes.Th}>Tasks</th>
                         <th className={classes.Th}>Note</th>
                         <th className={classes.Th}>Date</th>
-                        {userRole === 'Admin' || userRole === 'Member' ? <th className={classes.Th}>Action</th> : null}
+                        {userRole === Admin || userRole === Member ? <th className={classes.Th}>Action</th> : null}
                     </tr>
                     {taskTrackData.map(([id, val], idx) => {
                         return (
@@ -201,7 +203,7 @@ function TasksTracks({ linkPref }) {
                                 <td className={classes.Td}>{val.note}</td>
                                 <td className={classes.Td}>{val.date}</td>
                                 <td className={classes.Td}>
-                                    {userRole === 'Admin' || userRole === 'Member' ? (
+                                    {userRole === Admin || userRole === Member ? (
                                         <>
                                             <Button
                                                 className={classes.ActionButtonEdit}

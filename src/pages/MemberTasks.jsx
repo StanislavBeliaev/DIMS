@@ -21,6 +21,8 @@ import {
 } from 'firebase/database';
 import { Table } from 'components/Tables/MemberTasksTable';
 import PropTypes from 'prop-types';
+import { Admin } from 'constants';
+import { Mentor } from 'constants';
 
 function MembersTasks({ linkPref }) {
     /*eslint no-debugger: 1*/
@@ -42,7 +44,7 @@ function MembersTasks({ linkPref }) {
     );
     return (
         <div className={classes.MembersTasksContainer}>
-            {userRole === 'Admin' || userRole === 'Mentor' ? (
+            {userRole === Admin || userRole === Mentor ? (
                 <p className={classes.MembersTasksText}>{userName} current tasks</p>
             ) : (
                 <p className={classes.MembersTasksText}>Hi! Dear {userName}! There are your current tasks</p>

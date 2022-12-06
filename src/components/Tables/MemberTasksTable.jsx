@@ -4,45 +4,28 @@ import classes from '../../pages/pages.module.css';
 import app from '../../firebs';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {
-    getDatabase,
-    ref,
-    onValue,
-    set,
-    push,
-    child,
-    remove,
-    update,
-    query,
-    orderByChild,
-    equalTo,
-    get,
-} from 'firebase/database';
+import { getDatabase, ref, update } from 'firebase/database';
 import Button from 'react-bootstrap/Button';
+import { Mentor } from 'constants';
 
 export const Table = ({ userTasks, params, linkPref, userRole }) => {
-    /*eslint no-debugger: 1*/
     const userID = useSelector((state) => state.user.id);
     const database = getDatabase(app);
-    // const [statuses,setStatuses] = useState({});
-    // const updateItemStatus = (id,newStatus) => setStatuses({...statuses,[id]:newStatus})
-    const statusChange = (id, val, newStatus) => {
+    const statusChange = (id, { name, description, startdate, deadline, assignedUsers }, newStatus) => {
         update(ref(database, 'tasks/' + id), {
-            name: val.name,
-            description: val.description,
-            startdate: val.startdate,
-            deadline: val.deadline,
-            assignedUsers: val.assignedUsers,
+            name,
+            description,
+            startdate,
+            deadline,
+            assignedUsers,
             status: newStatus,
         });
     };
-    // useEffect(() => { console.log(statuses)}, [statuses])
     const colors = {
         Success: 'Green',
         Active: 'Blue',
         Fail: 'Red',
     };
-    console.log(colors);
     return (
         <table className={classes.Table}>
             <tbody>
@@ -52,7 +35,7 @@ export const Table = ({ userTasks, params, linkPref, userRole }) => {
                     <th className={classes.Th}>Start date</th>
                     <th className={classes.Th}>Deadline</th>
                     <th className={classes.Th}>Status</th>
-                    {userRole === 'Mentor' ? <th className={classes.Th}>Update status</th> : null}
+                    {userRole === Mentor ? <th className={classes.Th}>Update status</th> : null}
                 </tr>
                 {Object.entries(userTasks)
                     .filter(([k, v]) => v.assignedUsers.includes(params.UserID))
@@ -69,7 +52,7 @@ export const Table = ({ userTasks, params, linkPref, userRole }) => {
                                 <td className={classes.Td} style={{ color: colors[val.status] }}>
                                     {val.status}
                                 </td>
-                                {userRole === 'Mentor' ? (
+                                {userRole === Mentor ? (
                                     <td className={classes.TdButtons}>
                                         <Button
                                             variant='success'

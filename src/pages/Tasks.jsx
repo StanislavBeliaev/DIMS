@@ -91,12 +91,12 @@ function Tasks() {
         const usersTaskId = push(child(ref(database), 'users')).key;
         member.length > 0
             ? set(ref(database, 'tasks/' + taskId), {
-                  name: name,
-                  description: description,
-                  startdate: startdate,
-                  deadline: deadline,
+                  name,
+                  description,
+                  startdate,
+                  deadline,
                   assignedUsers: member,
-                  status: status,
+                  status,
               })
             : false;
     }

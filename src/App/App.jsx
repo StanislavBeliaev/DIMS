@@ -23,6 +23,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dataLoadedSuccess } from 'features/counter/dataSilce';
 import TasksTracks from 'pages/TasksTracks';
 import { Counter } from 'features/counter/Counter';
+import 'constants';
+import { Admin } from 'constants';
+import { Mentor } from 'constants';
 
 function App() {
     const [isLoggedin, setIsLoggedin] = useState(false);
@@ -55,7 +58,7 @@ function App() {
         <div className={classes.Main}>
             <div className={classes.Header}>
                 <div className={classes.Header__Menu}>
-                    {userRole === 'Admin' || userRole === 'Mentor' ? (
+                    {userRole === Admin || userRole === Mentor ? (
                         <Button className={classes.burgerMenu} onClick={burger}>
                             <BurgetMenuSVG />
                         </Button>
