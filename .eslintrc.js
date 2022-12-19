@@ -8,7 +8,16 @@ module.exports = {
         "plugin:react/recommended"
     ],
     "overrides": [
-    ],
+        {
+          "files": [
+            "**/*.test.js",
+            "**/*.test.jsx"
+          ],
+          "env": {
+            "jest": true
+          }
+        }
+      ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
@@ -16,9 +25,14 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    "settings": {
+        "react": {
+          "version": "detect"
+        }
+      },
     "rules": {
-        "react/jsx-uses-react": "error",   
-     "react/jsx-uses-vars": "error",
+        "react/jsx-uses-react": 1,   
+     "react/jsx-uses-vars": 1,
      "no-unused-vars": 1,
     }
     

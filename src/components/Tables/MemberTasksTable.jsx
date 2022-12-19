@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { getDatabase, ref, update } from 'firebase/database';
 import Button from 'react-bootstrap/Button';
 import { Mentor } from 'constants';
+import { Admin } from 'constants';
+import { Member } from 'constants';
 
 export const Table = ({ userTasks, params, linkPref, userRole }) => {
     const userID = useSelector((state) => state.user.id);
@@ -43,10 +45,14 @@ export const Table = ({ userTasks, params, linkPref, userRole }) => {
                         return (
                             <tr key={id} className={classes.TrData}>
                                 <td className={classes.Td}>{idx + 1}</td>
+                                {userRole === Member || userRole === Admin ? (
+                                    <td className={classes.Td}>
+                                        <Link to={linkPref + params.UserID + '/TasksTracks/' + id}>{val.name}</Link>
+                                    </td>
+                                ) : (
+                                    <td className={classes.Td}>{val.name}</td>
+                                )}
 
-                                <td className={classes.Td}>
-                                    <Link to={linkPref + params.UserID + '/TasksTracks/' + id}>{val.name}</Link>
-                                </td>
                                 <td className={classes.Td}>{val.startdate}</td>
                                 <td className={classes.Td}>{val.deadline}</td>
                                 <td className={classes.Td} style={{ color: colors[val.status] }}>

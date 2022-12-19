@@ -3,20 +3,7 @@ import Members from './Members';
 import app from '../firebs';
 import { ModalDelete } from 'components/Modal/ModalDelete';
 import { ModalEdit } from 'components/Modal/ModalEdit';
-import {
-    getDatabase,
-    ref,
-    onValue,
-    set,
-    push,
-    child,
-    remove,
-    update,
-    query,
-    orderByChild,
-    equalTo,
-    get,
-} from 'firebase/database';
+import { getDatabase, ref, onValue, set, push, child, remove, update } from 'firebase/database';
 import { ModalCreateNewTask } from 'components/Modal/ModalCreateNewTask';
 import { FormCreateNewTask } from 'components/FormCreateNewTask';
 import { Button } from 'components/Buttons/Button/Button';

@@ -1,20 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FulldataContext } from 'App/App';
-import { Route, Link } from 'react-router-dom';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { UserFormSVG } from 'SVG/UserFormSVG';
 import { PassFromSVG } from 'SVG/PassFormSVG';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { Outlet, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserProfile } from 'features/counter/userSlice';
 import PropTypes from 'prop-types';
 import classes from './pages.module.css';
-import { initializeApp } from 'firebase/app';
 import { useSelector } from 'react-redux';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import App from 'App/App';
 import app from '../firebs';
 
 function LoginPage({ login, setLogin, accToken, setAccToken, userRole, setUserRole }) {
