@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const dataSlice = createSlice({
     name: 'fulldata',
-    initialState: {},
+    initialState: {
+        isLoading: true,
+    },
     reducers: {
         dataLoadedSuccess: (state, action) => {
             state = action.payload;
-            return state;
+            return { ...state, isLoading: false };
         },
     },
 });

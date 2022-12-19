@@ -2,23 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'components/Buttons/Button/Button';
 import '../firebs';
 import app from '../firebs';
-import { Routes, Route, Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import classes from './pages.module.css';
 import { useSelector } from 'react-redux';
-import {
-    getDatabase,
-    ref,
-    onValue,
-    set,
-    push,
-    child,
-    remove,
-    update,
-    query,
-    orderByChild,
-    equalTo,
-    get,
-} from 'firebase/database';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import { Table } from 'components/Tables/MemberTasksTable';
 import PropTypes from 'prop-types';
 import { Admin } from 'constants';

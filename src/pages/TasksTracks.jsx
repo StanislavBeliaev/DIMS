@@ -7,22 +7,9 @@ import { ModalDelete } from 'components/Modal/ModalDelete';
 import PropTypes from 'prop-types';
 import classes from './pages.module.css';
 import '../firebs';
-import {
-    getDatabase,
-    ref,
-    onValue,
-    set,
-    push,
-    child,
-    remove,
-    update,
-    query,
-    orderByChild,
-    equalTo,
-    get,
-} from 'firebase/database';
+import { getDatabase, ref, onValue, set, push, child, remove, update } from 'firebase/database';
 import app from '../firebs';
-import { Routes, Route, Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Admin } from 'constants';

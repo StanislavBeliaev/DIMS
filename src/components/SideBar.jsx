@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
-import { Route, Link, Routes } from 'react-router-dom';
-import { Button } from 'components/Buttons/Button/Button';
-import Members from '../pages/Members';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import MembersProgress from '../pages/MemberProgress';
-import MembersTasks from '../pages/MemberTasks';
-import LoginPage from '../pages/LoginPage';
 import classes from '../App/App.module.css';
-import Tasks from 'pages/Tasks';
-import TasksTracks from 'pages/TasksTracks';
+import { HomeSVG } from 'SVG/HomeSVG';
+import { MemberSVG } from 'SVG/MemberSVG';
+import { TasksSVG } from 'SVG/TasksSVG';
+import { AboutUsSVG } from 'SVG/AboutUS';
 
 const rolesToLinks = {
     Admin: [
-        { link: '/Tasks/', label: 'Tasks' },
-        { link: '/Members/', label: 'Members' },
-        { link: '/', label: 'Home' },
-        { link: '/', label: 'About Us' },
+        { link: '/Tasks/', label: 'Tasks', icon: <TasksSVG /> },
+        { link: '/Members/', label: 'Members', icon: <MemberSVG /> },
+        { link: '/', label: 'Home', icon: <HomeSVG /> },
+        { link: '/', label: 'About Us', icon: <AboutUsSVG /> },
     ],
     Mentor: [
-        { link: '/MentorTasks/', label: 'Tasks' },
-        { link: '/MentorMembers/', label: 'Members' },
-        { link: '/', label: 'Home' },
-        { link: '/', label: 'About Us' },
+        { link: '/MentorTasks/', label: 'Tasks', icon: <TasksSVG /> },
+        { link: '/MentorMembers/', label: 'Members', icon: <MemberSVG /> },
+        { link: '/', label: 'Home', icon: <HomeSVG /> },
+        { link: '/', label: 'About Us', icon: <AboutUsSVG /> },
     ],
 };
 export const SideBar = ({ burgerStatus, setBurgerStatus, userRole }) => {
@@ -29,9 +26,12 @@ export const SideBar = ({ burgerStatus, setBurgerStatus, userRole }) => {
         <>
             {rolesToLinks[userRole] && burgerStatus ? (
                 <div className={classes.SideBar}>
-                    {rolesToLinks[userRole].map(({ link, label }, idx) => (
+                    {rolesToLinks[userRole].map(({ link, label, icon }, idx) => (
                         <Link to={link} key={idx}>
-                            <button className={classes.BurgerButtons}>{label}</button>
+                            <div className={classes.SideBarButtonsContainer}>
+                                {icon}
+                                <button className={classes.BurgerButtons}>{label}</button>
+                            </div>
                         </Link>
                     ))}
                 </div>
